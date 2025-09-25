@@ -1,0 +1,4 @@
+GET {{Cookbook}}/api/cookbook/Recipes/
+Accept: application/json
+
+###

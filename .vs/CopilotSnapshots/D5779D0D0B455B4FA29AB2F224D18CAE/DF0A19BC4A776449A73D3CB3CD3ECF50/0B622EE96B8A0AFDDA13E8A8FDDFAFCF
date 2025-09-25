@@ -1,0 +1,150 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Cookbook.SharedModels.Models;
+
+namespace Cookbook.Data
+{
+    public class CookbookDbContext : DbContext
+    {
+		public DbSet<Recipe> Recipes { get; set; }
+		public DbSet<User> Users { get; set; }
+		public DbSet<Step> Steps { get; set; }
+		public DbSet<Ingredient> Ingredients { get; set; }
+		public DbSet<Category> Categories { get; set; }
+		public DbSet<Review> Reviews { get; set; }
+		public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+		public DbSet<RecipeCategory> RecipeCategories { get; set; }
+        public CookbookDbContext(DbContextOptions<CookbookDbContext> options)
+            : base(options)
+        {
+        }
+
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			// Recipe
+	modelBuilder.Entity<Recipe>(entity =>
+	{
+		entity.ToTable("recipes");
+		entity.HasKey(e => e.Id);
+		entity.Property(e => e.Id).HasColumnName("id");
+		entity.Property(e => e.Title).HasColumnName("title").HasMaxLength(100).IsRequired(false);
+		entity.Property(e => e.PreparationTime).HasColumnName("preparation_time");
+		entity.Property(e => e.CookingTime).HasColumnName("cooking_time");
+		entity.Property(e => e.Difficulty).HasColumnName("difficulty");
+		entity.Property(e => e.ImagePath).HasColumnName("image_path").HasMaxLength(100);
+		entity.Property(e => e.CreatorId).HasColumnName("creator_id");
+		entity.HasOne(e => e.Creator)
+			.WithMany(u => u.Recipes)
+			.HasForeignKey(e => e.CreatorId)
+			.IsRequired(false);
+		entity.Ignore(e => e.CategoriesIds);
+		entity.Ignore(e => e.IngredientsIds);
+		entity.Ignore(e => e.IngredientsCount);
+		entity.Ignore(e => e.StepsCount);
+		entity.Ignore(e => e.ReviewsCount);
+		entity.Ignore(e => e.ReviewRating);
+	});
+
+	// User
+	modelBuilder.Entity<User>(entity =>
+	{
+		entity.ToTable("users");
+		entity.HasKey(e => e.Id);
+		entity.Property(e => e.Id).HasColumnName("id");
+		entity.Property(e => e.Username).HasColumnName("username").HasMaxLength(20);
+		entity.Property(e => e.Email).HasColumnName("email").HasMaxLength(50);
+		entity.Property(e => e.Password).HasColumnName("password").HasMaxLength(72);
+		entity.Property(e => e.ImagePath).HasColumnName("image_path").HasMaxLength(100);
+		entity.Property(e => e.Admin).HasColumnName("admin");
+		entity.Ignore(e => e.ConfirmPassword);
+		entity.Ignore(e => e.RememberMe);
+		entity.Ignore(e => e.LoginId);
+		entity.Ignore(e => e.TermsAccepted);
+	});
+
+	// Step
+	modelBuilder.Entity<Step>(entity =>
+	{
+		entity.ToTable("steps");
+		entity.HasKey(e => new { e.StepNo, e.RecipeId });
+		entity.Property(e => e.StepNo).HasColumnName("step_no");
+		entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
+		entity.Property(e => e.Text).HasColumnName("text").HasMaxLength(200);
+		entity.Property(e => e.Time).HasColumnName("time");
+		entity.Property(e => e.Cooking).HasColumnName("cooking");
+		entity.Ignore(e => e.Hours);
+		entity.Ignore(e => e.Minutes);
+		entity.Ignore(e => e.Seconds);
+	});
+
+	// Review
+	modelBuilder.Entity<Review>(entity =>
+	{
+		entity.ToTable("reviews");
+		entity.HasKey(e => new { e.RecipeId, e.UserId });
+		entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
+		entity.Property(e => e.UserId).HasColumnName("user_id");
+		entity.Property(e => e.Rating).HasColumnName("rating");
+		entity.Property(e => e.Comment).HasColumnName("comment").HasMaxLength(500);
+		entity.HasOne(e => e.User)
+			.WithMany()
+			.HasForeignKey(e => e.UserId)
+			.IsRequired();
+	});
+
+	// RecipeIngredient
+	modelBuilder.Entity<RecipeIngredient>(entity =>
+	{
+		entity.ToTable("recipes_ingredients");
+		entity.HasKey(e => new { e.RecipeId, e.IngredientId });
+		entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
+		entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
+		entity.Property(e => e.Quantity).HasColumnName("quantity");
+		entity.Property(e => e.Unit).HasColumnName("unit").HasMaxLength(20);
+		entity.HasOne(e => e.Recipe)
+			.WithMany(r => r.Ingredients)
+			.HasForeignKey(e => e.RecipeId);
+		entity.HasOne(e => e.Ingredient)
+			.WithMany()
+			.HasForeignKey(e => e.IngredientId);
+	});
+
+	// RecipeCategory
+	modelBuilder.Entity<RecipeCategory>(entity =>
+	{
+		entity.ToTable("recipe_categories");
+		entity.HasKey(e => new { e.RecipeId, e.CategoryId });
+		entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
+		entity.Property(e => e.CategoryId).HasColumnName("category_id");
+		entity.HasOne(e => e.Recipe)
+			.WithMany(r => r.Categories)
+			.HasForeignKey(e => e.RecipeId);
+		entity.HasOne(e => e.Category)
+			.WithMany()
+			.HasForeignKey(e => e.CategoryId);
+	});
+
+	// Ingredient
+	modelBuilder.Entity<Ingredient>(entity =>
+	{
+		entity.ToTable("ingredients");
+		entity.HasKey(e => e.Id);
+		entity.Property(e => e.Id).HasColumnName("id");
+		entity.Property(e => e.Name).HasColumnName("name").HasMaxLength(50);
+	});
+
+	// Category
+	modelBuilder.Entity<Category>(entity =>
+	{
+		entity.ToTable("categories");
+		entity.HasKey(e => e.id);
+		entity.Property(e => e.id).HasColumnName("id");
+		entity.Property(e => e.name).HasColumnName("name").HasMaxLength(50);
+	});
+		}
+	}

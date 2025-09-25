@@ -1,0 +1,33 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Cookbook.SharedModels.Models;
+
+namespace Cookbook.Data
+{
+    public class CookbookDbContext : DbContext
+    {
+		public DbSet<Recipe> Recipes { get; set; }
+		public DbSet<User> Users { get; set; }
+		public DbSet<Step> Steps { get; set; }
+		public DbSet<Ingredient> Ingredients { get; set; }
+		public DbSet<Category> Categories { get; set; }
+		public DbSet<Review> Reviews { get; set; }
+		public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+		public DbSet<RecipeCategory> RecipeCategories { get; set; }
+        public CookbookDbContext(DbContextOptions<CookbookDbContext> options)
+            : base(options)
+        {
+        }
+
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+
+		}
+
+		}
+}
