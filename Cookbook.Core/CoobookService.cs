@@ -54,9 +54,9 @@ namespace Cookbook.Core
 			return await userRepository.GetByAsync(id);
 		}
 
-		public async Task<User?> GetUserByAsync(User user)
+		public async Task<User?> GetUserByUsernameAsync(string username)
 		{
-			return await  userRepository.GetByAsync(user);
+			return await  userRepository.GetByUsernameAsync(username);
 		}
 
 		public Task<User> CreateUserAsync(User user)

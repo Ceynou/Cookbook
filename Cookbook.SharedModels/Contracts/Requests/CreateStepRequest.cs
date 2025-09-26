@@ -1,20 +1,20 @@
 ﻿using FluentValidation;
 
-namespace Cookbook.SharedModels.Domain.Contracts.Requests
+namespace Cookbook.SharedModels.Contracts.Requests
 {
-	public record UpdateStepRequest
+	public record CreateStepRequest
 	{
-		public required int StepNumber { get; set; }
+		public required short StepNumber { get; set; }
 		public required string Instruction { get; set; }
 		public required TimeSpan Duration { get; set; }
 		public required bool IsCooking { get; set; }
 	}
 
-	public class UpdateStepRequestValidator : AbstractValidator<UpdateStepRequest>
+	public class CreateStepRequestValidator : AbstractValidator<CreateStepRequest>
 	{
-		public UpdateStepRequestValidator()
+		public CreateStepRequestValidator()
 		{
-			RuleFor(s => s.StepNumber).InclusiveBetween(1, 20)
+			RuleFor(s => (int)s.StepNumber).InclusiveBetween(1, 20)
 				.WithMessage("Step number must be between 1 and 20");
 			
 			RuleFor(s => s.Instruction).NotEmpty().NotNull().Length(5, 500)

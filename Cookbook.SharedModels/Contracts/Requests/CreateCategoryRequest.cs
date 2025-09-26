@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Cookbook.SharedModels.Domain.Contracts.Requests
+namespace Cookbook.SharedModels.Contracts.Requests
 {
 	public record CreateCategoryRequest
 	{

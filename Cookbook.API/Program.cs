@@ -1,8 +1,10 @@
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using Cookbook.API.Domain;
 using Cookbook.Core;
 using Cookbook.Data;
+using Cookbook.SharedModels.Contracts.Requests;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +21,7 @@ namespace Cookbook.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add FluentValidation to the container.
-            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+            builder.Services.AddValidatorsFromAssemblyContaining<SignInUserRequest>();
 
             if (TryBuildSettings<IJwtSettings, JwtSettings, JwtSettingsValidator>(builder, "JwtSettings", out JwtSettings jwtSettings))
                 builder.Services.AddSingleton<IJwtSettings>(jwtSettings);
@@ -67,6 +69,7 @@ namespace Cookbook.API
                         RoleClaimType = ClaimTypes.Role
                     };
                 });
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             // builder.Services.AddEndpointsApiExplorer();
             // builder.Services.AddOpenApi();

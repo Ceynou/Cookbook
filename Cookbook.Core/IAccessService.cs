@@ -1,10 +1,11 @@
-﻿using Cookbook.SharedModels.Domain.Contracts.Requests;
+﻿using Cookbook.SharedModels.Contracts.Requests;
 using Cookbook.SharedModels.Entities;
 
 namespace Cookbook.Core;
 
 public interface IAccessService
 {
-    Task<User> SignInAsync(User user);
+    Task<User?> SignUpAsync(User user);
+    Task<User?> SignInAsync(User user);
 
 }

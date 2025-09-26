@@ -1,4 +1,4 @@
-﻿using Cookbook.SharedModels.Domain.Contracts.Responses;
+﻿using Cookbook.SharedModels.Contracts.Responses;
 using Cookbook.SharedModels.Entities;
 
 namespace Cookbook.SharedModels.Mappers
@@ -88,6 +88,16 @@ namespace Cookbook.SharedModels.Mappers
 		public static SignInUserResponse ToSignInUserResponse(this User user)
 		{
 			return new SignInUserResponse()
+			{
+				Username = user.Username,
+				Email = user.Email,
+				Token = string.Empty
+			};
+		}
+
+		public static SignUpUserResponse ToSignUpUserResponse(this User user)
+		{
+			return new SignUpUserResponse()
 			{
 				Username = user.Username,
 				Email = user.Email,

@@ -1,21 +1,23 @@
 ﻿using FluentValidation;
 
-namespace Cookbook.SharedModels.Domain.Contracts.Requests
+namespace Cookbook.SharedModels.Contracts.Requests
 {
-	public record UpdateRecipeRequest
+	public record CreateRecipeRequest
 	{
 		public required string Title { get; set; }
 		public required short Difficulty { get; set; }
-		public string? ImagePath { get; set; }
-		public ICollection<UpdateRecipeIngredientRequest>? Ingredients { get; set; }
-		public ICollection<UpdateRecipeCategoryRequest>? Categories { get; set; }
-		public ICollection<UpdateStepRequest>? Steps { get; set; }
+		public required string ImagePath { get; set; }
+		public required List<CreateRecipeIngredientRequest> Ingredients { get; set; }
+		public required List<CreateRecipeCategoryRequest> Categories { get; set; }
+		public required List<CreateStepRequest> Steps { get; set; }
+
+
 
 	}
 
-	public class UpdateRecipeRequestValidator : AbstractValidator<UpdateRecipeRequest>
+	public class CreateRecipeRequestValidator : AbstractValidator<CreateRecipeRequest>
 	{
-		public UpdateRecipeRequestValidator()
+		public CreateRecipeRequestValidator()
 		{
 			RuleFor(r => r.Title).NotEmpty().NotNull().Length(3, 100)
 				.Matches("[a-zA-Z]+").WithMessage("Incorrect title");
@@ -28,6 +30,7 @@ namespace Cookbook.SharedModels.Domain.Contracts.Requests
 			RuleFor(r => r.Categories).NotEmpty().NotNull();
 			RuleFor(r => r.Ingredients).NotEmpty().NotNull();
 			RuleFor(r => r.Steps).NotEmpty().NotNull();
+
 		}
 	}
 }

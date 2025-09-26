@@ -2,7 +2,7 @@
 using Cookbook.SharedModels.Entities;
 using FluentValidation;
 using Cookbook.Core;
-using Cookbook.SharedModels.Domain.Contracts.Requests;
+using Cookbook.SharedModels.Contracts.Requests;
 using Cookbook.SharedModels.Mappers;
 using Microsoft.AspNetCore.Authorization;
 
@@ -58,7 +58,7 @@ namespace Cookbook.API.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> Create([FromServices] IValidator<CreateRecipeRequest> validator, 
+		public async Task<IActionResult> Create(IValidator<CreateRecipeRequest> validator, 
 			[FromBody] CreateRecipeRequest request)
 		{
 			var res = await validator.ValidateAsync(request);
@@ -77,7 +77,7 @@ namespace Cookbook.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> Modify([FromServices] IValidator<UpdateRecipeRequest> validator, 
+		public async Task<IActionResult> Modify(IValidator<UpdateRecipeRequest> validator, 
 			[FromRoute] int id, [FromBody] UpdateRecipeRequest request)
 		{
 			var res = await validator.ValidateAsync(request);

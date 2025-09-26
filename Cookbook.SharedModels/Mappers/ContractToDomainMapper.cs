@@ -1,4 +1,4 @@
-﻿using Cookbook.SharedModels.Domain.Contracts.Requests;
+﻿using Cookbook.SharedModels.Contracts.Requests;
 using Cookbook.SharedModels.Entities;
 
 namespace Cookbook.SharedModels.Mappers
@@ -80,7 +80,6 @@ namespace Cookbook.SharedModels.Mappers
         {
             return new User()
             {
-                Email = signInUserRequest.Email,
                 Username = signInUserRequest.Username,
                 PasswordHash = signInUserRequest.Password
             };
@@ -89,8 +88,9 @@ namespace Cookbook.SharedModels.Mappers
         {
             return new User()
             {
-                Email = signUpUserRequest.Email,
                 Username = signUpUserRequest.Username,
+                Email = signUpUserRequest.Email,
+                BirthDate = signUpUserRequest.BirthDate,
                 PasswordHash = signUpUserRequest.Password
             };
         }

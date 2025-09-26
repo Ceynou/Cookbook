@@ -18,13 +18,10 @@ public class UserRepository(CookbookContext context) : IUserRepository
             .SingleOrDefaultAsync(u => u.UserId == key);
     }
 
-    public async Task<User?> GetByAsync(User user)
+    public async Task<User?> GetByUsernameAsync(string username)
     {
         return await context.Users
-            .SingleOrDefaultAsync(u => 
-                u.Email == user.Email 
-                && u.Username == user.Username 
-                && u.PasswordHash == user.PasswordHash);
+            .SingleOrDefaultAsync(u => u.Username == username);
     }
 
     public async Task<User> CreateAsync(User entity)

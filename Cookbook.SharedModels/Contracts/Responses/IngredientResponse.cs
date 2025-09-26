@@ -1,4 +1,4 @@
-﻿namespace Cookbook.SharedModels.Domain.Contracts.Responses
+﻿namespace Cookbook.SharedModels.Contracts.Responses
 {
 	public record IngredientResponse
 	{

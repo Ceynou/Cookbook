@@ -16,12 +16,13 @@ namespace Cookbook.Core
 		#region CRUD for users
 		Task<IEnumerable<User>> GetAllUsersAsync();
 		Task<User?> GetUserByAsync(int id);
-		Task<User?> GetUserByAsync(User user);
+		Task<User?> GetUserByUsernameAsync(string username);
 		Task<User> CreateUserAsync(User user);
 		Task<User?> ModifyUserAsync(int id, User user);
 		Task<bool> DeleteUserAsync(int id);
 		
 		#endregion
+		
 		#region CRUD for categories
 
 		//Task<IEnumerable<Category>> GetAllCategoriesAsync();
