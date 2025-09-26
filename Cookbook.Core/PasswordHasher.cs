@@ -4,8 +4,8 @@ namespace Cookbook.Core;
 
 public class PasswordHasher : IPasswordHasher
 {
-    private const int SaltSize = 16;
-    private const int HashSize = 32;
+    private const int SaltSize = 8;
+    private const int HashSize = 16;
     private const int Iterations = 100000;
         
     private readonly HashAlgorithmName _hashAlgorithmName =  HashAlgorithmName.SHA512;

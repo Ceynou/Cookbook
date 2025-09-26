@@ -2,14 +2,6 @@ GET {{Cookbook}}/api/cookbook/Recipes/Get
 Accept: application/json
 
 ###
-POST {{Cookbook}}/api/Authentication/signin
-Content-Type: application/json
-
-{
-  "Username" : "admin", "Email":"admin@admin.fr", "Password":"password"
-}
-
-###
 POST {{Cookbook}}/api/Authentication/signup
 Content-Type: application/json
 
@@ -18,4 +10,12 @@ Content-Type: application/json
   "Email":"tester2@tester.fr", 
   "BirthDate":"2000-10-02",
   "Password":"verysecurepassord" 
+}
+
+###
+POST {{Cookbook}}/api/Authentication/signin
+Content-Type: application/json
+
+{
+  "Username" : "UserTest2", "Email":"tester2@tester.fr", "Password":"verysecurepassord"
 }
