@@ -1,5 +1,4 @@
-﻿using Cookbook.Data.Interfaces;
-using Cookbook.SharedModels.Entities;
+﻿using Cookbook.SharedModels.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cookbook.Data.Repositories;

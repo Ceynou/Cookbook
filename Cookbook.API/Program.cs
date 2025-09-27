@@ -1,7 +1,5 @@
-using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using Cookbook.API.Domain;
 using Cookbook.Core;
 using Cookbook.Data;
 using Cookbook.SharedModels.Contracts.Requests;

@@ -9,7 +9,6 @@ namespace Cookbook.SharedModels.Mappers
         {
             return new Recipe
             {
-                RecipeId = 0, // Will be set in the service layer
                 Title = createRecipeRequest.Title,
                 PreparationDuration = createRecipeRequest.Steps
                     .Where(s => !s.IsCooking)
@@ -21,7 +20,6 @@ namespace Cookbook.SharedModels.Mappers
                     .Average(),
                 Difficulty = createRecipeRequest.Difficulty,
                 ImagePath = createRecipeRequest.ImagePath,
-                CreatorId = 0, // Will be set in the service layer
                 Categories = createRecipeRequest.Categories
                     .Select(c => new Category { CategoryId = c.CategoryId }).ToList(),
                 RecipesIngredients = createRecipeRequest.Ingredients.Select(i => new RecipesIngredient
@@ -44,7 +42,6 @@ namespace Cookbook.SharedModels.Mappers
         {
             return new Recipe
             {
-                RecipeId = 0, // Will be set in the service layer
                 Title = updateRecipeRequest.Title,
                 PreparationDuration = updateRecipeRequest.Steps
                     .Where(s => !s.IsCooking)
@@ -56,7 +53,6 @@ namespace Cookbook.SharedModels.Mappers
                     .Average(),
                 Difficulty = updateRecipeRequest.Difficulty,
                 ImagePath = updateRecipeRequest.ImagePath ?? string.Empty,
-                CreatorId = 0, // Will be set in the service layer
                 Categories = updateRecipeRequest.Categories
                                         ?.Select(c => new Category { CategoryId = c.CategoryId }).ToList() ??
                                     [],
@@ -69,7 +65,7 @@ namespace Cookbook.SharedModels.Mappers
                 Steps = updateRecipeRequest.Steps?.OrderBy(s => s.StepNumber).Select((s, index) => new Step
                 {
                     StepNumber = (short)index,
-                    Instruction = s.Instruction ?? string.Empty,
+                    Instruction = s.Instruction,
                     Duration = s.Duration,
                     IsCooking = s.IsCooking
                 }).ToList() ?? []
@@ -92,6 +88,38 @@ namespace Cookbook.SharedModels.Mappers
                 Email = signUpUserRequest.Email,
                 BirthDate = signUpUserRequest.BirthDate,
                 PasswordHash = signUpUserRequest.Password
+            };
+        }
+
+        public static Category ToCategory(this CreateCategoryRequest createCategoryRequest)
+        {
+            return new Category()
+            {
+                Name = createCategoryRequest.Name,
+            };
+        }
+
+        public static Category ToCategory(this UpdateCategoryRequest updateCategoryRequest)
+        {
+            return new Category()
+            {
+                Name = updateCategoryRequest.Name
+            };
+        }
+
+        public static Ingredient ToIngredient(this CreateIngredientRequest createIngredientRequest)
+        {
+            return new Ingredient()
+            {
+                Name = createIngredientRequest.Name
+            };
+        }
+
+        public static Ingredient ToIngredient(this UpdateIngredientRequest updateIngredientRequest)
+        {
+            return new Ingredient()
+            {
+                Name = updateIngredientRequest.Name
             };
         }
 

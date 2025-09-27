@@ -1,4 +1,6 @@
-﻿namespace Cookbook.API.Domain
+﻿using System.Security.Claims;
+
+namespace Cookbook.API
 {
 	public class GlobalExceptionMiddleware(
 		RequestDelegate next,

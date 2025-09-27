@@ -104,5 +104,23 @@ namespace Cookbook.SharedModels.Mappers
 				Token = string.Empty
 			};
 		}
+
+		public static CategoryResponse ToCategoryResponse(this Category category)
+		{
+			return new CategoryResponse()
+			{
+				CategoryId = category.CategoryId,
+				Name = category.Name
+			};
+		}
+
+		public static IngredientResponse ToIngredientResponse(this Ingredient ingredient)
+		{
+			return new IngredientResponse()
+			{
+				IngredientId = ingredient.IngredientId,
+				Name = ingredient.Name
+			};
+		}
 	}
 }

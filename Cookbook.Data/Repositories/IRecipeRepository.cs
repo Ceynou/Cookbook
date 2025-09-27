@@ -1,7 +1,6 @@
-﻿using Cookbook.Data;
-using Cookbook.SharedModels.Entities;
+﻿using Cookbook.SharedModels.Entities;
 
-namespace Cookbook.Data.Interfaces;
+namespace Cookbook.Data.Repositories;
 
 public interface IRecipeRepository : IGenericReadRepository<int, Recipe>, IGenericWriteRepository<int, Recipe>
 {

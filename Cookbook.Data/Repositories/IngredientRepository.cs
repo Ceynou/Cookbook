@@ -1,31 +1,41 @@
 ﻿using Cookbook.SharedModels.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cookbook.Data.Repositories;
 
-public class IngredientRepository : IIngredientRepository
+public class IngredientRepository(CookbookContext context) : IIngredientRepository
 {
-    public Task<IEnumerable<Ingredient>> GetAllAsync()
+    public async Task<IEnumerable<Ingredient>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await context.Ingredients.ToListAsync();
     }
 
-    public Task<Ingredient?> GetByAsync(int key)
+    public async Task<Ingredient?> GetByAsync(int key)
     {
-        throw new NotImplementedException();
+        return await context.Ingredients.FindAsync(key);
     }
 
-    public Task<Ingredient> CreateAsync(Ingredient entity)
+    public async Task<Ingredient> CreateAsync(Ingredient entity)
     {
-        throw new NotImplementedException();
+        context.Ingredients.Add(entity);
+        await context.SaveChangesAsync();
+        return entity;
     }
 
-    public Task<Ingredient> ModifyAsync(Ingredient entity)
+    public async Task<Ingredient> ModifyAsync(Ingredient entity)
     {
-        throw new NotImplementedException();
+        context.Ingredients.Update(entity);
+        await context.SaveChangesAsync();
+        return entity;
     }
 
-    public Task<bool> DeleteAsync(int key)
+    public async Task<bool> DeleteAsync(int key)
     {
-        throw new NotImplementedException();
+        // TODO Consider using ExecuteDeleteAsync(); instead
+        var entity = await GetByAsync(key);
+        if (entity == null) return false;
+        context.Ingredients.Remove(entity);
+        await context.SaveChangesAsync();
+        return true;
     }
 }

@@ -11,16 +11,14 @@ namespace Cookbook.API.Controllers
 	[Authorize(Roles = "admin,user")]
 	[Route("api/cookbook/[controller]")]
 	[ApiController]
-	public class RecipesController(ICookbookService recipeService) : ControllerBase
+	public class RecipesController(ICookbookService cookbookService) : ControllerBase
 	{
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> Get()
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> GetAll()
 		{
-			var recipes = (await recipeService.GetAllRecipesAsync()).ToList();
-			if (recipes.Count == 0)
-				return NotFound("No recipes found.");
+			var recipes = (await cookbookService.GetAllRecipesAsync()).ToList();
 
 			var response = recipes.Select(r => r.ToRecipeResponse());
 
@@ -30,9 +28,10 @@ namespace Cookbook.API.Controllers
 		[HttpGet("{id:int}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> GetBy(int id)
 		{
-			var recipe = await recipeService.GetRecipeByAsync(id);
+			var recipe = await cookbookService.GetRecipeByAsync(id);
 			if (recipe == null)
 				return NotFound($"Recipe with ID {id} not found.");
 
@@ -44,9 +43,10 @@ namespace Cookbook.API.Controllers
 		[HttpGet("{id:int}/full")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> GetFullBy(int id)
 		{
-			var recipe = await recipeService.GetRecipeByAsync(id);
+			var recipe = await cookbookService.GetRecipeByAsync(id);
 			if (recipe == null)
 				return NotFound($"Recipe with ID {id} not found.");
 			var response = recipe.ToRecipeDetailResponse();
@@ -65,9 +65,8 @@ namespace Cookbook.API.Controllers
 			if ( !res.IsValid)
 				return BadRequest();
 			
-			var createdRecipe = await recipeService.CreateRecipeAsync(request.ToRecipe());
-			if (createdRecipe is null)
-				return Problem();
+			var createdRecipe = await cookbookService.CreateRecipeAsync(request.ToRecipe());
+			
 			var response = createdRecipe.ToRecipeResponse();
 			
 			return CreatedAtAction(nameof(GetBy), new { id = createdRecipe.RecipeId }, response);
@@ -77,6 +76,7 @@ namespace Cookbook.API.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> Modify(IValidator<UpdateRecipeRequest> validator, 
 			[FromRoute] int id, [FromBody] UpdateRecipeRequest request)
 		{
@@ -84,11 +84,11 @@ namespace Cookbook.API.Controllers
 			if ( !res.IsValid)
 				return BadRequest();
 
-			var dbRecipe = await recipeService.GetRecipeByAsync(id);
+			var dbRecipe = await cookbookService.GetRecipeByAsync(id);
 			if (dbRecipe == null)
 				return NotFound($"Recipe with ID {id} not found.");
 
-			var updatedRecipe = await recipeService.ModifyRecipeAsync(id, request.ToRecipe());
+			var updatedRecipe = await cookbookService.ModifyRecipeAsync(id, request.ToRecipe());
 
 			if (updatedRecipe == null)
 				return NotFound($"Recipe with ID {id} not found after update attempt.");
@@ -99,9 +99,10 @@ namespace Cookbook.API.Controllers
 		[HttpDelete("{id:int}")]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var success = await recipeService.DeleteRecipeAsync(id);
+			var success = await cookbookService.DeleteRecipeAsync(id);
 			if (!success)
 				return NotFound($"Recipe with ID {id} not found.");
 
