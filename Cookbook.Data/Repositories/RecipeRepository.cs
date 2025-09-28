@@ -35,31 +35,25 @@ public class RecipeRepository(CookbookContext context) : IRecipeRepository
             .SingleOrDefaultAsync();
     }
 
-    public async Task<Recipe> CreateAsync(Recipe recipe)
+    public async Task<Recipe> CreateAsync(Recipe entity)
     {
-        context.Recipes.Add(recipe);
+        context.Recipes.Add(entity);
         await context.SaveChangesAsync();
-        return recipe;
+        return entity;
     }
 
-    public async Task<Recipe> ModifyAsync(Recipe recipe)
+    public async Task<Recipe> ModifyAsync(Recipe entity)
     {
-        context.Recipes.Update(recipe);
+        context.Recipes.Update(entity);
         await context.SaveChangesAsync();
-        return recipe;
+        return entity;
     }
 
     public async Task<bool> DeleteAsync(int key)
     {
-        // TODO choose the best way to delete
-        var recipe = await context.Recipes.SingleOrDefaultAsync(r => r.RecipeId == key);
-        if (recipe == null)
-        {
-            return false;
-        }
-        context.Recipes.Where(r => r.RecipeId == key).ExecuteDeleteAsync();
-        await context.SaveChangesAsync();
-        return true;
+        var res = await context.Recipes
+            .Where(r => r.RecipeId == key).ExecuteDeleteAsync();
+        return res == 1;
     }
     
 }

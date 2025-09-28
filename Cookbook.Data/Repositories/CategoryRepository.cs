@@ -31,10 +31,8 @@ public class CategoryRepository(CookbookContext context) : ICategoryRepository
 
     public async Task<bool> DeleteAsync(int key)
     {
-        var entity = await GetByAsync(key);
-        if (entity == null) return false;
-        context.Categories.Remove(entity);
-        await context.SaveChangesAsync();
-        return true;
+        var res = await context.Categories
+            .Where(c => c.CategoryId == key).ExecuteDeleteAsync();
+        return res == 1;
     }
 }

@@ -31,11 +31,8 @@ public class IngredientRepository(CookbookContext context) : IIngredientReposito
 
     public async Task<bool> DeleteAsync(int key)
     {
-        // TODO Consider using ExecuteDeleteAsync(); instead
-        var entity = await GetByAsync(key);
-        if (entity == null) return false;
-        context.Ingredients.Remove(entity);
-        await context.SaveChangesAsync();
-        return true;
+        var res = await context.Ingredients
+            .Where(i => i.IngredientId == key).ExecuteDeleteAsync();
+        return res == 1;
     }
 }
