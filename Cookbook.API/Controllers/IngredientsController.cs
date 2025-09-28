@@ -48,9 +48,7 @@ public class IngredientsController(ICookbookService cookbookService) : Controlle
     public async Task<IActionResult> Create(IValidator<CreateIngredientRequest> validator,
         [FromBody] CreateIngredientRequest request)
     {
-        var res = await validator.ValidateAsync(request);
-        if ( !res.IsValid)
-            return BadRequest(res.Errors);
+        await validator.ValidateAndThrowAsync(request);
 			
         var createdIngredient = await cookbookService.CreateIngredientAsync(request.ToIngredient());
         
@@ -66,9 +64,7 @@ public class IngredientsController(ICookbookService cookbookService) : Controlle
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(IValidator<UpdateIngredientRequest> validator, int id, UpdateIngredientRequest request)
     {
-        var res = await validator.ValidateAsync(request);
-        if ( !res.IsValid)
-            return BadRequest(res.Errors);
+        await validator.ValidateAndThrowAsync(request);
         
         var updatedIngredient = await cookbookService.ModifyIngredientAsync(id, request.ToIngredient());
 

@@ -17,7 +17,7 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SignUp(IValidator<SignUpUserRequest> validator, [FromBody] SignUpUserRequest request)
     {
-        validator.ValidateAndThrow(request);
+        await validator.ValidateAndThrowAsync(request);
         
         var user = await accessService.SignUpAsync(request.ToUser());
         var userResponse = user.ToSignUpUserResponse();
@@ -34,7 +34,7 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
     public async Task<IActionResult> SignIn(IValidator<SignInUserRequest> validator,
         [FromBody] SignInUserRequest request)
     {
-        validator.ValidateAndThrow(request);
+        await validator.ValidateAndThrowAsync(request);
 
         var user = await accessService.SignInAsync(request.ToUser());
         var userResponse = user.ToSignInUserResponse();

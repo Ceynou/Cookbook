@@ -46,9 +46,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     public async Task<IActionResult> Create(IValidator<CreateCategoryRequest> validator,
         [FromBody] CreateCategoryRequest request)
     {
-        var res = await validator.ValidateAsync(request);
-        if ( !res.IsValid)
-            return BadRequest(res.Errors);
+        await validator.ValidateAndThrowAsync(request);
 			
         var createdCategory = await cookbookService.CreateCategoryAsync(request.ToCategory());
         
@@ -64,9 +62,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(IValidator<UpdateCategoryRequest> validator, int id, UpdateCategoryRequest request)
     {
-        var res = await validator.ValidateAsync(request);
-        if ( !res.IsValid)
-            return BadRequest(res.Errors);
+        await validator.ValidateAndThrowAsync(request);
         
         var updatedCategory = await cookbookService.ModifyCategoryAsync(id, request.ToCategory());
 
