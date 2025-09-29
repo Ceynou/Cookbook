@@ -7,12 +7,15 @@ public class IngredientRepository(CookbookContext context) : IIngredientReposito
 {
     public async Task<IEnumerable<Ingredient>> GetAllAsync()
     {
-        return await context.Ingredients.ToListAsync();
+        return await context.Ingredients
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Ingredient?> GetByAsync(int key)
     {
-        return await context.Ingredients.FindAsync(key);
+        return await context.Ingredients
+            .FindAsync(key);
     }
 
     public async Task<Ingredient> CreateAsync(Ingredient entity)

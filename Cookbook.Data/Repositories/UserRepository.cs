@@ -8,19 +8,20 @@ public class UserRepository(CookbookContext context) : IUserRepository
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         return await context.Users
+            .AsNoTracking()
             .ToListAsync();
     }
 
     public async Task<User?> GetByAsync(int key)
     {
         return await context.Users
-            .Include(u => u.Recipes)
-            .SingleOrDefaultAsync(u => u.UserId == key);
+            .FindAsync(key);
     }
 
     public async Task<User?> GetByUsernameAsync(string username)
     {
         return await context.Users
+            .AsNoTracking()
             .SingleOrDefaultAsync(u => u.Username == username);
     }
 
@@ -38,8 +39,11 @@ public class UserRepository(CookbookContext context) : IUserRepository
         return entity;
     }
 
-    public Task<bool> DeleteAsync(int key)
+    public async Task<bool> DeleteAsync(int key)
     {
-        throw new NotImplementedException();
+        var res = await context.Users
+            .Where(u => u.UserId == key)
+            .ExecuteDeleteAsync();
+        return res == 1;
     }
 }

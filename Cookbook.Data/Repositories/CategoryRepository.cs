@@ -7,12 +7,15 @@ public class CategoryRepository(CookbookContext context) : ICategoryRepository
 {
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
-        return await context.Categories.ToListAsync();
+        return await context.Categories
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Category?> GetByAsync(int key)
     {
-        return await context.Categories.FindAsync(key);
+        return await context.Categories
+            .FindAsync(key);
     }
 
     public async Task<Category> CreateAsync(Category entity)
