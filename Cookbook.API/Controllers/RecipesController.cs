@@ -33,7 +33,7 @@ namespace Cookbook.API.Controllers
 		{
 			var recipe = await cookbookService.GetRecipeByAsync(id);
 			if (recipe == null)
-				return NotFound($"Recipe with ID {id} not found.");
+				return NotFound();
 
 			var response = recipe.ToRecipeResponse();
 
@@ -48,7 +48,7 @@ namespace Cookbook.API.Controllers
 		{
 			var recipe = await cookbookService.GetRecipeByAsync(id);
 			if (recipe == null)
-				return NotFound($"Recipe with ID {id} not found.");
+				return NotFound();
 			var response = recipe.ToRecipeDetailResponse();
 			
 			return Ok(response);
@@ -84,14 +84,7 @@ namespace Cookbook.API.Controllers
 			if ( !res.IsValid)
 				return BadRequest();
 
-			var dbRecipe = await cookbookService.GetRecipeByAsync(id);
-			if (dbRecipe == null)
-				return NotFound($"Recipe with ID {id} not found.");
-
 			var updatedRecipe = await cookbookService.ModifyRecipeAsync(id, request.ToRecipe());
-
-			if (updatedRecipe == null)
-				return NotFound($"Recipe with ID {id} not found after update attempt.");
 
 			return Ok(updatedRecipe.ToRecipeResponse());
 		}
@@ -104,7 +97,7 @@ namespace Cookbook.API.Controllers
 		{
 			var success = await cookbookService.DeleteRecipeAsync(id);
 			if (!success)
-				return NotFound($"Recipe with ID {id} not found.");
+				return NotFound();
 
 			return NoContent();
 		}

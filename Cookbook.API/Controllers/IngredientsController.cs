@@ -34,7 +34,7 @@ public class IngredientsController(ICookbookService cookbookService) : Controlle
     {
         var ingredient = await cookbookService.GetIngredientByAsync(id);
         if (ingredient == null) 
-            return NotFound($"Ingredient with id {id} not found");
+            return NotFound();
         
         var response = ingredient.ToIngredientResponse();
         
@@ -69,7 +69,7 @@ public class IngredientsController(ICookbookService cookbookService) : Controlle
         var updatedIngredient = await cookbookService.ModifyIngredientAsync(id, request.ToIngredient());
 
         if (updatedIngredient is null)
-            return BadRequest("Ingredient was not updated");
+            return BadRequest();
         var response = updatedIngredient.ToIngredientResponse();
         
         return Ok(response);
@@ -82,6 +82,6 @@ public class IngredientsController(ICookbookService cookbookService) : Controlle
     public async Task<IActionResult> Delete(int id)
     {
         var success = await cookbookService.DeleteIngredientAsync(id);
-        return success ? NoContent() : NotFound($"Ingredient with id {id} not found");
+        return success ? NoContent() : NotFound();
     }
 }

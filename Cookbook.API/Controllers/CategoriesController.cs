@@ -32,7 +32,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     {
         var category = await cookbookService.GetCategoryByAsync(id);
         if (category == null) 
-            return NotFound($"Category with id {id} not found");
+            return NotFound();
         
         var response = category.ToCategoryResponse();
         
@@ -67,7 +67,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
         var updatedCategory = await cookbookService.ModifyCategoryAsync(id, request.ToCategory());
 
         if (updatedCategory is null)
-            return BadRequest("Category was not updated");
+            return BadRequest();
         var response = updatedCategory.ToCategoryResponse();
         
         return Ok(response);
@@ -80,6 +80,6 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     public async Task<IActionResult> Delete(int id)
     {
         var success = await cookbookService.DeleteCategoryAsync(id);
-        return success ? NoContent() : NotFound($"Category with id {id} not found");
+        return success ? NoContent() : NotFound();
     }
 }
