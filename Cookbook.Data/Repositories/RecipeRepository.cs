@@ -1,4 +1,4 @@
-﻿using Cookbook.SharedModels.Entities;
+﻿using Cookbook.SharedData.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cookbook.Data.Repositories;
@@ -11,7 +11,7 @@ public class RecipeRepository(CookbookContext context) : IRecipeRepository
             .Include(r => r.Creator)
             .Include(r => r.Steps)
             .Include(r => r.RecipesIngredients)
-            .Include(r => r.Categories)
+            .Include(r => r.RecipesCategories)
             .Include(r => r.Reviews)
             .ThenInclude(rw => rw.Reviewer)
             .AsNoTracking()
@@ -27,7 +27,8 @@ public class RecipeRepository(CookbookContext context) : IRecipeRepository
             .Include(r => r.Steps)
             .Include(r => r.RecipesIngredients)
             .ThenInclude(ri => ri.Ingredient)
-            .Include(r => r.Categories)
+            .Include(r => r.RecipesCategories)
+            .ThenInclude(r => r.Category)
             .Include(r => r.Reviews)
             .ThenInclude(rw => rw.Reviewer)
             .AsNoTracking()
@@ -35,18 +36,18 @@ public class RecipeRepository(CookbookContext context) : IRecipeRepository
             .SingleOrDefaultAsync();
     }
 
-    public async Task<Recipe> CreateAsync(Recipe entity)
+    public async Task<Recipe?> CreateAsync(Recipe entity)
     {
         context.Recipes.Add(entity);
-        await context.SaveChangesAsync();
-        return entity;
+        var res = await context.SaveChangesAsync();
+        return res != 0 ? entity : null;
     }
 
-    public async Task<Recipe> ModifyAsync(Recipe entity)
+    public async Task<Recipe?> ModifyAsync(Recipe entity)
     {
         context.Recipes.Update(entity);
-        await context.SaveChangesAsync();
-        return entity;
+        var res = await context.SaveChangesAsync();
+        return res != 0 ? entity : null;
     }
 
     public async Task<bool> DeleteAsync(int key)
@@ -55,5 +56,4 @@ public class RecipeRepository(CookbookContext context) : IRecipeRepository
             .Where(r => r.RecipeId == key).ExecuteDeleteAsync();
         return res == 1;
     }
-    
 }

@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Cookbook.SharedData;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Cookbook.Core;
@@ -21,9 +22,9 @@ public class JwtService(IJwtSettings jwtSettings) : IJwtService
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: jwtSettings.Issuer,
-            audience: jwtSettings.Audience,
-            claims: claims,
+            jwtSettings.Issuer,
+            jwtSettings.Audience,
+            claims,
             expires: DateTime.UtcNow.AddMinutes(jwtSettings.ExpirationMinutes),
             signingCredentials: credentials
         );

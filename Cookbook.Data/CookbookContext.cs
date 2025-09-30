@@ -1,12 +1,13 @@
-﻿using Cookbook.SharedModels.Entities;
+﻿using Cookbook.SharedData.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Cookbook.Data;
 
-public class CookbookContext: DbContext
+public class CookbookContext : DbContext
 {
     private readonly IConfiguration _configuration;
+
     public CookbookContext()
     {
     }
@@ -15,14 +16,6 @@ public class CookbookContext: DbContext
         : base(options)
     {
         _configuration = config;
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseNpgsql(_configuration.GetSection("DatabaseProviderString").Value);
-        }
     }
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -38,6 +31,12 @@ public class CookbookContext: DbContext
     public virtual DbSet<Step> Steps { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+            optionsBuilder.UseNpgsql(_configuration.GetSection("DatabaseProviderString").Value);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,23 +96,24 @@ public class CookbookContext: DbContext
                 .HasForeignKey(d => d.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("recipes_creator_id_fkey");
+        });
 
-            entity.HasMany(d => d.Categories).WithMany(p => p.Recipes)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RecipesCategory",
-                    r => r.HasOne<Category>().WithMany()
-                        .HasForeignKey("CategoryId")
-                        .HasConstraintName("recipes_categories_category_id_fkey"),
-                    l => l.HasOne<Recipe>().WithMany()
-                        .HasForeignKey("RecipeId")
-                        .HasConstraintName("recipes_categories_recipe_id_fkey"),
-                    j =>
-                    {
-                        j.HasKey("RecipeId", "CategoryId").HasName("recipes_categories_pkey");
-                        j.ToTable("recipes_categories");
-                        j.IndexerProperty<int>("RecipeId").HasColumnName("recipe_id");
-                        j.IndexerProperty<short>("CategoryId").HasColumnName("category_id");
-                    });
+        modelBuilder.Entity<RecipesCategory>(entity =>
+        {
+            entity.HasKey(e => new { e.RecipeId, e.CategoryId }).HasName("recipes_categories_pkey");
+
+            entity.ToTable("recipes_categories");
+
+            entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.RecipesCategories)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("recipes_categories_category_id_fkey");
+
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipesCategories)
+                .HasForeignKey(d => d.RecipeId)
+                .HasConstraintName("recipes_categories_recipe_id_fkey");
         });
 
         modelBuilder.Entity<RecipesIngredient>(entity =>

@@ -1,7 +1,4 @@
-﻿
-using Cookbook.SharedModels.Entities;
-
-namespace Cookbook.Core;
+﻿namespace Cookbook.Core;
 
 public interface IJwtService
 {

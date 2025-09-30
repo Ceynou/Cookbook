@@ -1,12 +1,13 @@
 ﻿using Cookbook.Core;
-using Cookbook.SharedModels.Contracts.Requests;
-using Cookbook.SharedModels.Mappers;
+using Cookbook.SharedData.Contracts.Requests;
+using Cookbook.SharedData.Mappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cookbook.API.Controllers;
 
+[AllowAnonymous]
 [Route("api/[controller]")]
 [ApiController]
 public class AuthenticationController(IJwtService jwtService, IAccessService accessService) : ControllerBase
@@ -15,18 +16,19 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> SignUp(IValidator<SignUpUserRequest> validator, [FromBody] SignUpUserRequest request)
+    public async Task<IActionResult> SignUp(IValidator<SignUpUserRequest> validator,
+        [FromBody] SignUpUserRequest request)
     {
         await validator.ValidateAndThrowAsync(request);
-        
+
         var user = await accessService.SignUpAsync(request.ToUser());
         var userResponse = user.ToSignUpUserResponse();
-        string[] roles = [user.IsAdmin ? "admin,user" : "user"];
+        string[] roles = user.IsAdmin ? ["admin", "user"] : ["user"];
         userResponse.Token = jwtService.GenerateJwt(user.Username, roles);
-        
+
         return Ok(userResponse);
     }
-    
+
     [HttpPost("signin")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,7 +40,7 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
 
         var user = await accessService.SignInAsync(request.ToUser());
         var userResponse = user.ToSignInUserResponse();
-        string[] roles = [user.IsAdmin ? "admin,user" : "user"];
+        string[] roles = user.IsAdmin ? ["admin", "user"] : ["user"];
         userResponse.Token = jwtService.GenerateJwt(user.Username, roles);
 
         return Ok(userResponse);

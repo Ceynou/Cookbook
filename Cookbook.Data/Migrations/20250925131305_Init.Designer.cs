@@ -25,7 +25,7 @@ namespace Cookbook.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Category", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Category", b =>
                 {
                     b.Property<short>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("categories", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Ingredient", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Ingredient", b =>
                 {
                     b.Property<short>("IngredientId")
                         .ValueGeneratedOnAdd()
@@ -73,7 +73,7 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("ingredients", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Recipe", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Recipe", b =>
                 {
                     b.Property<int>("RecipeId")
                         .ValueGeneratedOnAdd()
@@ -118,7 +118,7 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("recipes", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.RecipesIngredient", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipesIngredient", b =>
                 {
                     b.Property<int>("RecipeId")
                         .HasColumnType("integer")
@@ -146,7 +146,7 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("recipes_ingredients", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Review", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Review", b =>
                 {
                     b.Property<int>("RecipeId")
                         .HasColumnType("integer")
@@ -173,7 +173,7 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("reviews", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Step", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Step", b =>
                 {
                     b.Property<short>("StepNumber")
                         .HasColumnType("smallint")
@@ -205,7 +205,7 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("steps", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.User", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -275,9 +275,9 @@ namespace Cookbook.Data.Migrations
                     b.ToTable("recipes_categories", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Recipe", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Recipe", b =>
                 {
-                    b.HasOne("Cookbook.SharedModels.Entities.User", "Creator")
+                    b.HasOne("Cookbook.SharedData.Entities.User", "Creator")
                         .WithMany("Recipes")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,16 +286,16 @@ namespace Cookbook.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.RecipesIngredient", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipesIngredient", b =>
                 {
-                    b.HasOne("Cookbook.SharedModels.Entities.Ingredient", "Ingredient")
+                    b.HasOne("Cookbook.SharedData.Entities.Ingredient", "Ingredient")
                         .WithMany("RecipesIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("recipes_ingredients_ingredient_id_fkey");
 
-                    b.HasOne("Cookbook.SharedModels.Entities.Recipe", "Recipe")
+                    b.HasOne("Cookbook.SharedData.Entities.Recipe", "Recipe")
                         .WithMany("RecipesIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -307,16 +307,16 @@ namespace Cookbook.Data.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Review", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Review", b =>
                 {
-                    b.HasOne("Cookbook.SharedModels.Entities.Recipe", "Recipe")
+                    b.HasOne("Cookbook.SharedData.Entities.Recipe", "Recipe")
                         .WithMany("Reviews")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("reviews_recipe_id_fkey");
 
-                    b.HasOne("Cookbook.SharedModels.Entities.User", "Reviewer")
+                    b.HasOne("Cookbook.SharedData.Entities.User", "Reviewer")
                         .WithMany("Reviews")
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -328,9 +328,9 @@ namespace Cookbook.Data.Migrations
                     b.Navigation("Reviewer");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Step", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Step", b =>
                 {
-                    b.HasOne("Cookbook.SharedModels.Entities.Recipe", "Recipe")
+                    b.HasOne("Cookbook.SharedData.Entities.Recipe", "Recipe")
                         .WithMany("Steps")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -342,14 +342,14 @@ namespace Cookbook.Data.Migrations
 
             modelBuilder.Entity("RecipesCategory", b =>
                 {
-                    b.HasOne("Cookbook.SharedModels.Entities.Category", null)
+                    b.HasOne("Cookbook.SharedData.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("recipes_categories_category_id_fkey");
 
-                    b.HasOne("Cookbook.SharedModels.Entities.Recipe", null)
+                    b.HasOne("Cookbook.SharedData.Entities.Recipe", null)
                         .WithMany()
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -357,12 +357,12 @@ namespace Cookbook.Data.Migrations
                         .HasConstraintName("recipes_categories_recipe_id_fkey");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Ingredient", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Ingredient", b =>
                 {
                     b.Navigation("RecipesIngredients");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.Recipe", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.Recipe", b =>
                 {
                     b.Navigation("RecipesIngredients");
 
@@ -371,7 +371,7 @@ namespace Cookbook.Data.Migrations
                     b.Navigation("Steps");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedModels.Entities.User", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.User", b =>
                 {
                     b.Navigation("Recipes");
 

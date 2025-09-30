@@ -1,9 +1,8 @@
-﻿namespace Cookbook.Data
+﻿namespace Cookbook.Data.Repositories;
+
+public interface IGenericWriteRepository<in TKey, TEntity>
 {
-    public interface IGenericWriteRepository<TKey, TEntity>
-    {
-        Task<TEntity> CreateAsync(TEntity entity);
-        Task<TEntity> ModifyAsync(TEntity entity);
-        Task<bool> DeleteAsync(TKey key);
-    }
+    Task<TEntity?> CreateAsync(TEntity entity);
+    Task<TEntity?> ModifyAsync(TEntity entity);
+    Task<bool> DeleteAsync(TKey key);
 }

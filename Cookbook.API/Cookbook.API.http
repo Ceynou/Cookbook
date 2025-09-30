@@ -6,16 +6,60 @@ POST {{Cookbook}}/api/Authentication/signup
 Content-Type: application/json
 
 {
-  "Username" : "UserTest2", 
-  "Email":"tester2@tester.fr", 
-  "BirthDate":"2000-10-02",
-  "Password":"verysecurepassord" 
+  "Username": "UserTest2",
+  "Email": "tester2@tester.fr",
+  "BirthDate": "2000-10-02",
+  "Password": "verysecurepassord"
 }
 
-###
+### 
+# @name signin 
+
 POST {{Cookbook}}/api/Authentication/signin
 Content-Type: application/json
 
 {
-  "Username" : "UserTest2", "Email":"tester2@tester.fr", "Password":"verysecurepassord"
+  "Username": "UserTest2",
+  "Email": "tester2@tester.fr",
+  "Password": "verysecurepassord"
+}
+> {%
+    if (response.status === 200 || response.status === 201) {
+        client.global.set('auth_token', response.body.token);
+    } else {
+        client.log('Sign-in failed with status: ' + response.status);
+        client.global.clear('auth_token'); // Clear token if sign-in fails
+    }
+%}
+
+###
+
+POST {{Cookbook}}/api/cookbook/Recipes/
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "sdf",
+  "difficulty": 1,
+  "imagePath": "sdf",
+  "ingredients": [
+    {
+      "ingredientId": 1,
+      "quantity": 1,
+      "unit": null
+    }
+  ],
+  "categories": [
+    {
+      "categoryId": 1
+    }
+  ],
+  "steps": [
+    {
+      "stepNumber": 1,
+      "instruction": "sdf",
+      "duration": "20:20:20",
+      "isCooking": true
+    }
+  ]
 }

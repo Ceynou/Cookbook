@@ -1,47 +1,47 @@
-﻿using Cookbook.SharedModels.Entities;
+﻿using Cookbook.SharedData.Entities;
 
-namespace Cookbook.Core
+namespace Cookbook.Core;
+
+public interface ICookbookService
 {
-	public interface ICookbookService
-	{
-		#region CRUD for recipes
-		Task<IEnumerable<Recipe>> GetAllRecipesAsync();
-		Task<Recipe?> GetRecipeByAsync(int id);
-		Task<Recipe> CreateRecipeAsync(Recipe recipe);
-		Task<Recipe?> ModifyRecipeAsync(int id, Recipe recipe);
-		Task<bool> DeleteRecipeAsync(int id);
+    #region CRUD for recipes
 
-		#endregion
-		
-		#region CRUD for users
-		Task<IEnumerable<User>> GetAllUsersAsync();
-		Task<User?> GetUserByAsync(int id);
-		Task<User?> GetUserByUsernameAsync(string username);
-		Task<User> CreateUserAsync(User user);
-		Task<User?> ModifyUserAsync(int id, User user);
-		Task<bool> DeleteUserAsync(int id);
-		
-		#endregion
-		
-		#region CRUD for categories
+    Task<IEnumerable<Recipe>> GetAllRecipesAsync();
+    Task<Recipe> GetRecipeByAsync(int id);
+    Task<Recipe> CreateRecipeAsync(Recipe recipe);
+    Task<Recipe> ModifyRecipeAsync(int id, Recipe recipe);
+    Task DeleteRecipeAsync(int id);
 
-		Task<IEnumerable<Category>> GetAllCategoriesAsync();
-		Task<Category?> GetCategoryByAsync(int id);
-		Task<Category> CreateCategoryAsync(Category category);
-		Task<Category?> ModifyCategoryAsync(int id, Category category);
-		Task<bool> DeleteCategoryAsync(int id);
+    #endregion
 
-		#endregion
-		
-		
-		#region CRUD for ingredients
-		
-		Task<IEnumerable<Ingredient>> GetAllIngredientsAsync();
-		Task<Ingredient?> GetIngredientByAsync(int id);
-		Task<Ingredient> CreateIngredientAsync(Ingredient ingredient);
-		Task<Ingredient?> ModifyIngredientAsync(int id, Ingredient ingredient);
-		Task<bool> DeleteIngredientAsync(int id);
+    #region CRUD for users
 
-		#endregion
-	}
+    Task<IEnumerable<User>> GetAllUsersAsync();
+    Task<User> GetUserByAsync(int id);
+    Task<User> GetUserByUsernameAsync(string username);
+    Task<User> CreateUserAsync(User user);
+    Task<User> ModifyUserAsync(int id, User user);
+    Task DeleteUserAsync(int id);
+
+    #endregion
+
+    #region CRUD for categories
+
+    Task<IEnumerable<Category>> GetAllCategoriesAsync();
+    Task<Category> GetCategoryByAsync(int id);
+    Task<Category> CreateCategoryAsync(Category category);
+    Task<Category> ModifyCategoryAsync(int id, Category category);
+    Task DeleteCategoryAsync(int id);
+
+    #endregion
+
+    #region CRUD for ingredients
+
+    Task<IEnumerable<Ingredient>> GetAllIngredientsAsync();
+    Task<Ingredient> GetIngredientByAsync(int id);
+    Task<Ingredient> CreateIngredientAsync(Ingredient ingredient);
+    Task<Ingredient> ModifyIngredientAsync(int id, Ingredient ingredient);
+    Task DeleteIngredientAsync(int id);
+
+    #endregion
 }

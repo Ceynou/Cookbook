@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Cookbook.Core
+namespace Cookbook.Core;
+
+public static class ServicesExt
 {
-	public static class ServicesExt
-	{
-		public static void AddBll(this IServiceCollection services)
-		{
-			// Services are typically Scoped
-			services.AddScoped<ICookbookService, CookbookService>();
-			services.AddScoped<IAccessService, AccessService>();
-			services.AddScoped<IJwtService, JwtService>();
-			services.AddTransient<IPasswordHasher, PasswordHasher>();
-		}
-	}
+    public static void AddBll(this IServiceCollection services)
+    {
+        // Services are typically Scoped
+        services.AddScoped<ICookbookService, CookbookService>();
+        services.AddScoped<IAccessService, AccessService>();
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddTransient<IPasswordHasher, PasswordHasher>();
+    }
 }
