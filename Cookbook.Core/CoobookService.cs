@@ -36,16 +36,12 @@ public class CookbookService(
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
         var user = httpContextAccessor.HttpContext?.User;
-        var userIdClaim = user?.FindFirst("user_id")?.Value; 
-        if (int.TryParse(userIdClaim, out int creatorId))
-        {
+        var userIdClaim = user?.FindFirst("user_id")?.Value;
+        if (int.TryParse(userIdClaim, out var creatorId))
             recipe.CreatorId = creatorId;
-        }
         else
-        {
             // Handle case where User ID is not present or invalid
             throw new Exception("Creator ID claim missing or invalid.");
-        }
 
 
         var entity = await recipeRepository.CreateAsync(recipe);

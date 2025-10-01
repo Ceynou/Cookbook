@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Cookbook.API.Controllers;
+﻿using Cookbook.API.Controllers;
 using Cookbook.Core;
 using Cookbook.SharedData;
 using Cookbook.SharedData.Entities;
@@ -42,10 +41,8 @@ public class RecipesControllerUnitTests
 
         var exceptionMessage = "Recipe not found";
 
-        var ex = await Assert.ThrowsAsync<ResourceNotFoundException>(
-            () => sut.GetBy(1)
-            );
+        var ex = await Assert.ThrowsAsync<ResourceNotFoundException>(() => sut.GetBy(1)
+        );
         Assert.Contains(exceptionMessage, ex.Message);
-        
     }
 }
