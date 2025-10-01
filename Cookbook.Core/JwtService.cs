@@ -8,13 +8,13 @@ namespace Cookbook.Core;
 
 public class JwtService(IJwtSettings jwtSettings) : IJwtService
 {
-    public string GenerateJwt(string username, params string[] roles)
+    public string GenerateJwt(string id, params string[] roles)
     {
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, username),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, username)
+            new(JwtRegisteredClaimNames.Sub, id),
+            new(ClaimTypes.NameIdentifier, id)
         };
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Trim())));
 

@@ -4,6 +4,7 @@ public class ResourceNotFoundException : Exception
 {
     public ResourceNotFoundException()
     {
+        
     }
 
     public ResourceNotFoundException(Type type)
@@ -28,7 +29,7 @@ public class ResourceNotFoundException : Exception
     private static string BuildMessage(Type resourceType, string? propertyName = null, object? propertyValue = null)
     {
         if (propertyValue is null || propertyName is null)
-            return $"{resourceType.Name} Not Found";
+            return $"{resourceType.Name} not found";
         return $"{resourceType.Name} with {propertyName} of value {propertyValue} not found.";
     }
 }

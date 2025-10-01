@@ -10,6 +10,6 @@ public static class ServicesExt
         services.AddScoped<ICookbookService, CookbookService>();
         services.AddScoped<IAccessService, AccessService>();
         services.AddScoped<IJwtService, JwtService>();
-        services.AddTransient<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
     }
 }

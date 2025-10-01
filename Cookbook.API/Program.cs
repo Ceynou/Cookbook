@@ -62,6 +62,7 @@ public class Program
                 };
             });
 
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddEndpointsApiExplorer();
 
         var app = builder.Build();
