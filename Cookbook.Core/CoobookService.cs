@@ -71,7 +71,10 @@ public class CookbookService(
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
-        return await userRepository.GetAllAsync();
+        var res = await userRepository.GetAllAsync();
+        if (!res.Any())
+            throw new ResourceNotFoundException(typeof(IEnumerable<User>));
+        return res;
     }
 
     public async Task<User> GetUserByAsync(int id)
