@@ -22,9 +22,9 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
         await validator.ValidateAndThrowAsync(request);
 
         var user = await accessService.SignUpAsync(request.ToUser());
-        var userResponse = user.ToSignUpUserResponse();
         string[] roles = user.IsAdmin ? ["admin", "user"] : ["user"];
-        userResponse.Token = jwtService.GenerateJwt(user.Username, roles);
+        var userResponse = user.ToSignUpUserResponse();
+        userResponse.Token = jwtService.GenerateJwt(user.UserId.ToString(), roles);
 
         return Ok(userResponse);
     }
@@ -39,9 +39,9 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
         await validator.ValidateAndThrowAsync(request);
 
         var user = await accessService.SignInAsync(request.ToUser());
-        var userResponse = user.ToSignInUserResponse();
         string[] roles = user.IsAdmin ? ["admin", "user"] : ["user"];
-        userResponse.Token = jwtService.GenerateJwt(user.Username, roles);
+        var userResponse = user.ToSignInUserResponse();
+        userResponse.Token = jwtService.GenerateJwt(user.UserId.ToString(), roles);
 
         return Ok(userResponse);
     }

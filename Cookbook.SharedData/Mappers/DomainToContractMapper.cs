@@ -90,6 +90,7 @@ public static class DomainToContractMapper
     {
         return new SignInUserResponse
         {
+            UserId = user.UserId,
             Username = user.Username,
             Email = user.Email,
             Token = string.Empty
@@ -100,6 +101,7 @@ public static class DomainToContractMapper
     {
         return new SignUpUserResponse
         {
+            UserId = user.UserId,
             Username = user.Username,
             Email = user.Email,
             Token = string.Empty
