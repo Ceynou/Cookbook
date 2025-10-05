@@ -2,6 +2,7 @@
 using Cookbook.SharedData;
 using Cookbook.SharedData.Entities;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Cookbook.Core;
 
@@ -36,7 +37,7 @@ public class CookbookService(
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
         var user = httpContextAccessor.HttpContext?.User;
-        var userIdClaim = user?.FindFirst("user_id")?.Value;
+        var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (int.TryParse(userIdClaim, out var creatorId))
             recipe.CreatorId = creatorId;
         else
