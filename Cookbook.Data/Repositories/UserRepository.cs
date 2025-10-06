@@ -6,6 +6,7 @@ namespace Cookbook.Data.Repositories;
 public class UserRepository(CookbookContext context) : IUserRepository
 {
     private readonly CookbookContext _context = context ?? throw new ArgumentNullException(nameof(context));
+
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         return await _context.Users

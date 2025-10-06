@@ -6,6 +6,7 @@ namespace Cookbook.Data.Repositories;
 public class CategoryRepository(CookbookContext context) : ICategoryRepository
 {
     private readonly CookbookContext _context = context ?? throw new ArgumentNullException(nameof(context));
+
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
         return await _context.Categories

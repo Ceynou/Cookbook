@@ -93,7 +93,7 @@ public static class DomainToContractMapper
             UserId = user.UserId,
             Username = user.Username,
             Email = user.Email,
-            IsAdmin = user.IsAdmin,
+            IsAdmin = user.IsAdmin
         };
     }
 

@@ -6,6 +6,7 @@ namespace Cookbook.Data.Repositories;
 public class IngredientRepository(CookbookContext context) : IIngredientRepository
 {
     private readonly CookbookContext _context = context ?? throw new ArgumentNullException(nameof(context));
+
     public async Task<IEnumerable<Ingredient>> GetAllAsync()
     {
         return await _context.Ingredients
@@ -28,7 +29,7 @@ public class IngredientRepository(CookbookContext context) : IIngredientReposito
     public async Task<Ingredient?> ModifyAsync(Ingredient entity)
     {
         _context.Ingredients.Update(entity);
-        var res= await _context.SaveChangesAsync();
+        var res = await _context.SaveChangesAsync();
         return res != 0 ? entity : null;
     }
 
