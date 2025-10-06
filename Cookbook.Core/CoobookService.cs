@@ -38,21 +38,19 @@ public class CookbookService(
     {
         var user = httpContextAccessor.HttpContext?.User;
         var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         if (int.TryParse(userIdClaim, out var creatorId))
             recipe.CreatorId = creatorId;
         else
-            // Handle case where User ID is not present or invalid
             throw new Exception("Creator ID claim missing or invalid.");
 
-
-        var entity = await recipeRepository.CreateAsync(recipe);
-        if (entity == null)
-            throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), recipe.RecipeId);
-        return entity;
+        var res = await recipeRepository.CreateAsync(recipe);
+        return res;
     }
 
     public async Task<Recipe> ModifyRecipeAsync(int id, Recipe recipe)
     {
+        recipe.RecipeId = id;
         var res = await recipeRepository.ModifyAsync(recipe);
         if (res == null)
             throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), recipe.RecipeId);
@@ -97,8 +95,6 @@ public class CookbookService(
     public async Task<User> CreateUserAsync(User user)
     {
         var res = await userRepository.CreateAsync(user);
-        if (res == null)
-            throw new ResourceNotFoundException(typeof(User), nameof(User), user.Username);
         return res;
     }
 
