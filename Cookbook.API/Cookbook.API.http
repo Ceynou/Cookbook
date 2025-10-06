@@ -1,4 +1,4 @@
-GET {{Cookbook}}/api/cookbook/Recipes/Get
+GET {{Cookbook}}/api/cookbook/Recipes/
 Accept: application/json
 
 ###
@@ -12,8 +12,7 @@ Content-Type: application/json
   "Password": "verysecurepassord"
 }
 
-### 
-# @name signin 
+###
 
 POST {{Cookbook}}/api/Authentication/signin
 Content-Type: application/json
@@ -63,3 +62,39 @@ Authorization: Bearer {{auth_token}}
     }
   ]
 }
+
+###
+PUT {{Cookbook}}/api/cookbook/Recipes/18
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "sdf",
+  "difficulty": 1,
+  "imagePath": "sdf",
+  "ingredients": [
+    {
+      "ingredientId": 1,
+      "quantity": 1,
+      "unit": null
+    }
+  ],
+  "categories": [
+    {
+      "categoryId": 1
+    }
+  ],
+  "steps": [
+    {
+      "stepNumber": 1,
+      "instruction": "sdf",
+      "duration": "20:20:20",
+      "isCooking": true
+    }
+  ]
+}
+
+###
+GET {{Cookbook}}/api/cookbook/users/admin
+Authorization: Bearer {{auth_token}}
+Accept: application/json

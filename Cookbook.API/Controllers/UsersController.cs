@@ -37,6 +37,20 @@ public class UsersController(ICookbookService cookbookService) : ControllerBase
         return Ok(response);
     }
 
+
+    [HttpGet("{username}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetByUsername(string username)
+    {
+        var user = await cookbookService.GetUserByUsernameAsync(username);
+
+        var response = user.ToUserResponse();
+
+        return Ok(response);
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
