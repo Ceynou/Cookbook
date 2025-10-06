@@ -5,37 +5,37 @@ namespace Cookbook.Data.Repositories;
 
 public class CategoryRepository(CookbookContext context) : ICategoryRepository
 {
+    private readonly CookbookContext _context = context ?? throw new ArgumentNullException(nameof(context));
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
-        return await context.Categories
-            .AsNoTracking()
+        return await _context.Categories
             .ToListAsync();
     }
 
     public async Task<Category?> GetByAsync(int key)
     {
-        return await context.Categories
+        return await _context.Categories
             .FindAsync(key);
     }
 
     public async Task<Category> CreateAsync(Category entity)
     {
-        context.Categories.Add(entity);
-        await context.SaveChangesAsync();
+        _context.Categories.Add(entity);
+        await _context.SaveChangesAsync();
         return entity;
     }
 
-    public async Task<Category> ModifyAsync(Category entity)
+    public async Task<Category?> ModifyAsync(Category entity)
     {
-        context.Categories.Update(entity);
-        await context.SaveChangesAsync();
-        return entity;
+        _context.Categories.Update(entity);
+        var res = await _context.SaveChangesAsync();
+        return res != 0 ? entity : null;
     }
 
     public async Task<bool> DeleteAsync(int key)
     {
-        var res = await context.Categories
+        var res = await _context.Categories
             .Where(c => c.CategoryId == key).ExecuteDeleteAsync();
-        return res == 1;
+        return res != 0;
     }
 }
