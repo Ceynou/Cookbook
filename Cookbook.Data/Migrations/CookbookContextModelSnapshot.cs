@@ -229,10 +229,6 @@ namespace Cookbook.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("UserId"));
 
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date")
-                        .HasColumnName("birth_date");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)

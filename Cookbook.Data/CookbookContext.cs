@@ -194,7 +194,6 @@ public class CookbookContext : DbContext
             entity.Property(e => e.UserId)
                 .UseIdentityAlwaysColumn()
                 .HasColumnName("user_id");
-            entity.Property(e => e.BirthDate).HasColumnName("birth_date");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .HasColumnName("email");

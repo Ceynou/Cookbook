@@ -12,9 +12,9 @@ CREATE TABLE
     email VARCHAR(50) UNIQUE NOT NULL,
     password_hash VARCHAR(72) NOT NULL,
     is_admin BOOL NOT NULL DEFAULT FALSE,
-    birth_date DATE NOT NULL,
+    --birth_date DATE NOT NULL,
     image_path VARCHAR(255),
-    CONSTRAINT cc_legal_age CHECK (birth_date < now () - INTERVAL '13 years'),
+    --CONSTRAINT cc_legal_age CHECK (birth_date < now () - INTERVAL '13 years'),
     CONSTRAINT cc_username_not_empty CHECK (username <> ''),
     CONSTRAINT cc_email_not_empty CHECK (email <> ''),
     CONSTRAINT cc_image_path_not_empty CHECK (image_path <> '')

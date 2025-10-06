@@ -86,28 +86,6 @@ public static class DomainToContractMapper
         };
     }
 
-    public static SignInUserResponse ToSignInUserResponse(this User user)
-    {
-        return new SignInUserResponse
-        {
-            UserId = user.UserId,
-            Username = user.Username,
-            Email = user.Email,
-            Token = string.Empty
-        };
-    }
-
-    public static SignUpUserResponse ToSignUpUserResponse(this User user)
-    {
-        return new SignUpUserResponse
-        {
-            UserId = user.UserId,
-            Username = user.Username,
-            Email = user.Email,
-            Token = string.Empty
-        };
-    }
-
     public static UserResponse ToUserResponse(this User user)
     {
         return new UserResponse
@@ -116,7 +94,6 @@ public static class DomainToContractMapper
             Username = user.Username,
             Email = user.Email,
             IsAdmin = user.IsAdmin,
-            BirthDate = user.BirthDate
         };
     }
 

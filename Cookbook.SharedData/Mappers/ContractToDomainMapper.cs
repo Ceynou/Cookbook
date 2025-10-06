@@ -96,7 +96,6 @@ public static class ContractToDomainMapper
         {
             Username = signUpUserRequest.Username,
             Email = signUpUserRequest.Email,
-            BirthDate = signUpUserRequest.BirthDate,
             PasswordHash = signUpUserRequest.Password
         };
     }
@@ -108,7 +107,6 @@ public static class ContractToDomainMapper
             Username = createUserRequest.Username,
             PasswordHash = createUserRequest.Password,
             Email = createUserRequest.Email,
-            BirthDate = createUserRequest.BirthDate,
             IsAdmin = createUserRequest.IsAdmin
         };
     }
@@ -120,7 +118,6 @@ public static class ContractToDomainMapper
             Username = updateUserRequest.Username,
             PasswordHash = updateUserRequest.Password,
             Email = updateUserRequest.Email,
-            BirthDate = updateUserRequest.BirthDate,
             IsAdmin = updateUserRequest.IsAdmin
         };
     }

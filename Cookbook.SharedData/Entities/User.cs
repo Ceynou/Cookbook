@@ -12,8 +12,6 @@ public class User
 
     public bool IsAdmin { get; set; }
 
-    public DateOnly BirthDate { get; set; }
-
     public string? ImagePath { get; set; }
 
     public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();

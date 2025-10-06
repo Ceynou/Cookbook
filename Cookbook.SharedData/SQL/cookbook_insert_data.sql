@@ -1,14 +1,14 @@
 -- Insert data into the users table
-INSERT INTO users (username, email, password_hash, birth_date, is_admin, image_path) VALUES
-('admin', 'admin@admin.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', TRUE, '3.jpg'),
-('user0', 'user0@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, '29.jpg'),
-('user1', 'user1@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, '34.jpg'),
-('user2', 'user2@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, '42.jpg'),
-('user3', 'user3@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, '81.jpg'),
-('user4', 'user4@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, '85.jpg'),
-('user5', 'user5@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, NULL),
-('user6', 'user6@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, NULL),
-('user7', 'user7@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', '1999-01-01', FALSE, NULL);
+INSERT INTO users (username, email, password_hash, is_admin, image_path) VALUES
+('admin', 'admin@admin.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', TRUE, '3.jpg'),
+('user0', 'user0@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, '29.jpg'),
+('user1', 'user1@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, '34.jpg'),
+('user2', 'user2@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, '42.jpg'),
+('user3', 'user3@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, '81.jpg'),
+('user4', 'user4@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, '85.jpg'),
+('user5', 'user5@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, NULL),
+('user6', 'user6@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, NULL),
+('user7', 'user7@user.fr', '$2a$11$wEmM.8Xz88.ew0uzwKje5eFWNbPKpzoaYFHOVRuTQAEHAzxX1gWam', FALSE, NULL);
 
 
 -- Insert data into the recipes table
