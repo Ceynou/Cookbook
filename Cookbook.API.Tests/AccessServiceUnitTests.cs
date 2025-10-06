@@ -18,7 +18,6 @@ public class AccessServiceUnitTests
         Username = "testuser",
         PasswordHash = HashedPassword,
         Email = "user01@live.fr",
-        BirthDate = DateOnly.MinValue,
         ImagePath = "TestImage.jpg",
         IsAdmin = false
     };

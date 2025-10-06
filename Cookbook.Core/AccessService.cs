@@ -1,4 +1,5 @@
 ﻿using Cookbook.Data.Repositories;
+using Cookbook.SharedData;
 using Cookbook.SharedData.Entities;
 
 namespace Cookbook.Core;
@@ -9,8 +10,6 @@ public class AccessService(IUserRepository userRepository, IPasswordHasher passw
     {
         user.PasswordHash = passwordHasher.HashPassword(user.PasswordHash);
         var dbUser = await userRepository.CreateAsync(user);
-        if (dbUser == null)
-            throw new Exception("Could not create user");
         return dbUser;
     }
 
@@ -18,7 +17,7 @@ public class AccessService(IUserRepository userRepository, IPasswordHasher passw
     {
         var dbUser = await userRepository.GetByUsernameAsync(user.Username);
         if (dbUser == null)
-            throw new Exception("Invalid credentials");
+            throw new ResourceNotFoundException(typeof(User), nameof(user.Username), user.Username);
         return passwordHasher.VerifyPassword(user.PasswordHash, dbUser.PasswordHash)
             ? dbUser
             : throw new Exception("Invalid credentials");

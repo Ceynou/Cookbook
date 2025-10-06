@@ -1,5 +1,6 @@
 using Cookbook.API.Controllers;
 using Cookbook.Core;
+using Cookbook.SharedData;
 using Cookbook.SharedData.Contracts.Requests;
 using Cookbook.SharedData.Contracts.Responses;
 using Cookbook.SharedData.Entities;
@@ -9,294 +10,224 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-// NOTE: IAccessService and IJwtService are assumed based on their usage in AuthenticationController.cs
-// They are mocked here to test the controller's logic.
-
 namespace Cookbook.API.Tests;
+
+// ----------------------------------------------------------------------
+// UNIT TESTS
+// ----------------------------------------------------------------------
 
 public class AuthenticationControllerUnitTests
 {
-    // Mock Data
-    private const string MockToken = "mock.jwt.token";
-    private readonly Mock<IAccessService> _accessServiceMock;
-    private readonly Mock<IJwtService> _jwtServiceMock;
-
-    private readonly User _mockAdminUser = new()
-    {
-        UserId = 10,
-        Username = "adminuser",
-        IsAdmin = true,
-        BirthDate = DateOnly.MinValue,
-        Email = "admin1@admin.fr"
-    };
-
-    private readonly User _mockRegularUser = new()
-    {
-        UserId = 11,
-        Username = "regularuser",
-        IsAdmin = false,
-        BirthDate = DateOnly.MinValue,
-        Email = "user20@user.fr"
-    };
-
-    private readonly SignInUserRequest _mockSignInRequest = new()
-    {
-        Username = "existinguser",
-        Password = "P@ssword1"
-    };
-
-    private readonly SignUpUserRequest _mockSignUpRequest = new()
-    {
-        Username = "newuser",
-        Password = "P@ssword1",
-        Email = "something@er.fr",
-        BirthDate = DateOnly.MinValue
-    };
-
-    private readonly AuthenticationController _sut; // System Under Test
+    private const string TestToken = "fake.jwt.token";
+    private readonly Mock<IAccessService> _mockAccessService = new();
+    private readonly Mock<IJwtService> _mockJwtService = new();
+    private readonly Mock<IValidator<SignInUserRequest>> _mockSignInValidator = new();
+    private readonly Mock<IValidator<SignUpUserRequest>> _mockSignUpValidator = new();
+    private readonly AuthenticationController _sut;
 
     public AuthenticationControllerUnitTests()
     {
-        // Use MockBehavior.Strict for all service mocks
-        _jwtServiceMock = new Mock<IJwtService>(MockBehavior.Strict);
-        _accessServiceMock = new Mock<IAccessService>(MockBehavior.Strict);
-        _sut = new AuthenticationController(_jwtServiceMock.Object, _accessServiceMock.Object);
+        // Arrange - Setup the controller with mocked dependencies
+        _sut = new AuthenticationController(_mockJwtService.Object, _mockAccessService.Object);
 
-        // Setup the JWT service to always return the mock token
-        _jwtServiceMock
-            .Setup(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()))
-            .Returns(MockToken);
+        // Standard setup for JWT generation
+        _mockJwtService.Setup(s => s.GenerateJwt(
+            It.IsAny<string>(),
+            It.IsAny<string[]>()
+        )).Returns(TestToken);
     }
 
-    #region SignUp Tests
-
-    [Fact]
-    public async Task SignUp_WhenValidRequestCreatesAdminUser_Should_Return_Ok_With_AdminToken()
+    // --- Common Helper to Setup Successful Validation ---
+    private void SetupSuccessfulValidation<T>(Mock<IValidator<T>> mockValidator) where T : notnull
     {
-        // ARRANGE
-        var validatorMock = Mock.Of<IValidator<SignUpUserRequest>>();
-
-        // Setup Access Service to return an ADMIN user
-        _accessServiceMock
-            .Setup(a => a.SignUpAsync(It.IsAny<User>()))
-            .ReturnsAsync(_mockAdminUser);
-
-        // ACT
-        var actualResult = await _sut.SignUp(validatorMock, _mockSignUpRequest);
-
-        // ASSERT
-        var okResult = Assert.IsType<OkObjectResult>(actualResult);
-        var response = Assert.IsType<SignUpUserResponse>(okResult.Value);
-
-        Assert.Equal(MockToken, response.Token);
-        Assert.Equal(_mockAdminUser.UserId, response.UserId);
-
-        // Verify JWT service was called with 'admin' and 'user' roles
-        _jwtServiceMock.Verify(
-            j => j.GenerateJwt(
-                _mockAdminUser.UserId.ToString(),
-                It.Is<string[]>(roles => roles.Contains("admin") && roles.Contains("user"))
-            ),
-            Times.Once);
-        _accessServiceMock.Verify(a => a.SignUpAsync(It.IsAny<User>()), Times.Once);
+        mockValidator.Setup(v => v.ValidateAsync(
+            It.IsAny<T>(),
+            It.IsAny<CancellationToken>()
+        )).ReturnsAsync(new ValidationResult());
     }
 
-    [Fact]
-    public async Task SignUp_WhenValidRequestCreatesRegularUser_Should_Return_Ok_With_UserToken()
+    // --- Common Helper to Setup Failed Validation ---
+    private void SetupFailedValidation<T>(Mock<IValidator<T>> mockValidator) where T : notnull
     {
-        // ARRANGE
-        var validatorMock = Mock.Of<IValidator<SignUpUserRequest>>();
-
-        // Setup Access Service to return a REGULAR user
-        _accessServiceMock
-            .Setup(a => a.SignUpAsync(It.IsAny<User>()))
-            .ReturnsAsync(_mockRegularUser);
-
-        // ACT
-        var actualResult = await _sut.SignUp(validatorMock, _mockSignUpRequest);
-
-        // ASSERT
-        var okResult = Assert.IsType<OkObjectResult>(actualResult);
-        var response = Assert.IsType<SignUpUserResponse>(okResult.Value);
-
-        Assert.Equal(MockToken, response.Token);
-        Assert.Equal(_mockRegularUser.UserId, response.UserId);
-
-        // Verify JWT service was called ONLY with 'user' role
-        _jwtServiceMock.Verify(
-            j => j.GenerateJwt(
-                _mockRegularUser.UserId.ToString(),
-                It.Is<string[]>(roles => roles.Length == 1 && roles.Contains("user"))
-            ),
-            Times.Once);
-        _accessServiceMock.Verify(a => a.SignUpAsync(It.IsAny<User>()), Times.Once);
-    }
-
-    [Fact]
-    public async Task SignUp_With_InvalidRequest_Should_Throw_ValidationException()
-    {
-        // ARRANGE
-        var validatorMock = new Mock<IValidator<SignUpUserRequest>>();
-
-        // Create the exception that ValidateAndThrowAsync would generate.
-        var validationFailures = new List<ValidationFailure> { new("Password", "Password is too weak") };
-        var expectedException = new ValidationException(validationFailures);
-
-        // Force the ValidateAsync setup to throw the ValidationException directly
-        validatorMock
-            .Setup(v => v.ValidateAsync(
-                It.IsAny<ValidationContext<SignUpUserRequest>>(),
+        mockValidator.Setup(v => v.ValidateAsync(
+                It.IsAny<ValidationContext<T>>(),
                 It.IsAny<CancellationToken>()))
-            .ThrowsAsync(expectedException);
+            .ThrowsAsync(new ValidationException(new List<ValidationFailure>()));
+    }
 
-        // Add redundant service setups to satisfy the Strict Mock (will not be called)
-        _accessServiceMock.Setup(a => a.SignUpAsync(It.IsAny<User>())).ReturnsAsync(_mockRegularUser);
+    // ------------------------------------------------------------
+    // SIGN UP TESTS
+    // ------------------------------------------------------------
 
-        // ACT & ASSERT
-        await Assert.ThrowsAsync<ValidationException>(() => _sut.SignUp(validatorMock.Object, _mockSignUpRequest));
+    [Fact]
+    public async Task SignUp_ValidRequest_ReturnsOkWithJwtResponseAndUserRole()
+    {
+        // Arrange
+        var request = new SignUpUserRequest { Username = "newuser", Email = "a@b.com", Password = "Password123" };
+        var createdUser = new User { UserId = 10, Username = request.Username, IsAdmin = false };
 
-        // Verify services were NOT called
-        _accessServiceMock.Verify(a => a.SignUpAsync(It.IsAny<User>()), Times.Never);
-        _jwtServiceMock.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
+        SetupSuccessfulValidation(_mockSignUpValidator);
+        _mockAccessService.Setup(s => s.SignUpAsync(It.IsAny<User>()))
+            .ReturnsAsync(createdUser);
+
+        // Act
+        var result = await _sut.SignUp(_mockSignUpValidator.Object, request);
+
+        // Assert
+        // 1. Verify the HTTP response type (200 OK)
+        var okResult = Assert.IsType<OkObjectResult>(result);
+
+        // 2. Verify the response body type
+        var jwtResponse = Assert.IsType<JwtResponse>(okResult.Value);
+        Assert.Equal(TestToken, jwtResponse.Token);
+
+        // 3. Verify internal dependencies were called
+        _mockAccessService.Verify(a => a.SignUpAsync(It.IsAny<User>()), Times.Once);
+
+        // 4. Verify JwtService was called with the correct user ID and ROLE
+        _mockJwtService.Verify(j => j.GenerateJwt(
+            createdUser.UserId.ToString(),
+            It.Is<string[]>(roles => roles.Length == 1 && roles.Contains("user"))
+        ), Times.Once);
     }
 
     [Fact]
-    public async Task SignUp_WhenAccessServiceThrows_Should_PropagateException()
+    public async Task SignUp_AdminUser_ReturnsOkWithAdminAndUserRoles()
     {
-        // ARRANGE
-        var validatorMock = Mock.Of<IValidator<SignUpUserRequest>>();
+        // Arrange
+        var request = new SignUpUserRequest { Username = "adminuser", Email = "a@b.com", Password = "Password123" };
+        var createdUser = new User { UserId = 20, Username = request.Username, IsAdmin = true }; // IsAdmin = true
 
-        // Mock service to throw when signing up (e.g., username already exists)
-        var serviceException = new Exception("Username already exists.");
-        _accessServiceMock
-            .Setup(a => a.SignUpAsync(It.IsAny<User>()))
+        SetupSuccessfulValidation(_mockSignUpValidator);
+        _mockAccessService.Setup(s => s.SignUpAsync(It.IsAny<User>()))
+            .ReturnsAsync(createdUser);
+
+        // Act
+        await _sut.SignUp(_mockSignUpValidator.Object, request);
+
+        // Assert
+        // Verify JwtService was called with both "admin" and "user" roles
+        _mockJwtService.Verify(j => j.GenerateJwt(
+            createdUser.UserId.ToString(),
+            It.Is<string[]>(roles => roles.Length == 2 && roles.Contains("user") && roles.Contains("admin"))
+        ), Times.Once);
+    }
+
+    [Fact]
+    public async Task SignUp_ValidationFails_ThrowsValidationException()
+    {
+        // Arrange
+        var request = new SignUpUserRequest { Username = "", Email = "a@b.com", Password = "123" };
+        SetupFailedValidation(_mockSignUpValidator);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ValidationException>(() =>
+            _sut.SignUp(_mockSignUpValidator.Object, request));
+
+        // Verify core logic was not executed
+        _mockAccessService.Verify(a => a.SignUpAsync(It.IsAny<User>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task SignUp_AccessServiceThrows_ExceptionIsPropagated()
+    {
+        // Arrange
+        var request = new SignUpUserRequest { Username = "duplicate", Email = "a@b.com", Password = "Password123" };
+        var serviceException = new Exception("Database unique constraint violation.");
+
+        SetupSuccessfulValidation(_mockSignUpValidator);
+        _mockAccessService.Setup(s => s.SignUpAsync(It.IsAny<User>()))
             .ThrowsAsync(serviceException);
 
-        // ACT & ASSERT
-        var actualException = await Assert.ThrowsAsync<Exception>(() => _sut.SignUp(validatorMock, _mockSignUpRequest));
-        Assert.Equal(serviceException.Message, actualException.Message);
+        // Act & Assert
+        var thrownException = await Assert.ThrowsAsync<Exception>(() =>
+            _sut.SignUp(_mockSignUpValidator.Object, request));
 
-        // Verify services were called appropriately
-        _accessServiceMock.Verify(a => a.SignUpAsync(It.IsAny<User>()), Times.Once);
-        _jwtServiceMock.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
+        Assert.Equal(serviceException.Message, thrownException.Message);
+        _mockJwtService.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
     }
 
-    #endregion
-
-    // -------------------------------------------------------------------------
-
-    #region SignIn Tests
+    // ------------------------------------------------------------
+    // SIGN IN TESTS
+    // ------------------------------------------------------------
 
     [Fact]
-    public async Task SignIn_WhenValidRequestAuthenticatesAdminUser_Should_Return_Ok_With_AdminToken()
+    public async Task SignIn_ValidCredentials_ReturnsOkWithJwtResponse()
     {
-        // ARRANGE
-        var validatorMock = Mock.Of<IValidator<SignInUserRequest>>();
+        // Arrange
+        var request = new SignInUserRequest { Username = "existinguser", Password = "Password123" };
+        var authenticatedUser = new User { UserId = 30, Username = request.Username, IsAdmin = false };
 
-        // Setup Access Service to return an ADMIN user
-        _accessServiceMock
-            .Setup(a => a.SignInAsync(It.IsAny<User>()))
-            .ReturnsAsync(_mockAdminUser);
+        SetupSuccessfulValidation(_mockSignInValidator);
+        _mockAccessService.Setup(s => s.SignInAsync(It.IsAny<User>()))
+            .ReturnsAsync(authenticatedUser);
 
-        // ACT
-        var actualResult = await _sut.SignIn(validatorMock, _mockSignInRequest);
+        // Act
+        var result = await _sut.SignIn(_mockSignInValidator.Object, request);
 
-        // ASSERT
-        var okResult = Assert.IsType<OkObjectResult>(actualResult);
-        var response = Assert.IsType<SignInUserResponse>(okResult.Value);
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var jwtResponse = Assert.IsType<JwtResponse>(okResult.Value);
+        Assert.Equal(TestToken, jwtResponse.Token);
 
-        Assert.Equal(MockToken, response.Token);
-        Assert.Equal(_mockAdminUser.UserId, response.UserId);
+        _mockAccessService.Verify(a => a.SignInAsync(It.IsAny<User>()), Times.Once);
 
-        // Verify JWT service was called with 'admin' and 'user' roles
-        _jwtServiceMock.Verify(
-            j => j.GenerateJwt(
-                _mockAdminUser.UserId.ToString(),
-                It.Is<string[]>(roles => roles.Contains("admin") && roles.Contains("user"))
-            ),
-            Times.Once);
-        _accessServiceMock.Verify(a => a.SignInAsync(It.IsAny<User>()), Times.Once);
+        // Verify JwtService was called with the correct user ID and ROLE
+        _mockJwtService.Verify(j => j.GenerateJwt(
+            authenticatedUser.UserId.ToString(),
+            It.Is<string[]>(roles => roles.Length == 1 && roles.Contains("user"))
+        ), Times.Once);
     }
 
     [Fact]
-    public async Task SignIn_WhenValidRequestAuthenticatesRegularUser_Should_Return_Ok_With_UserToken()
+    public async Task SignIn_InvalidCredentials_ThrowsException()
     {
-        // ARRANGE
-        var validatorMock = Mock.Of<IValidator<SignInUserRequest>>();
+        // Arrange
+        var request = new SignInUserRequest { Username = "existinguser", Password = "WrongPassword" };
 
-        // Setup Access Service to return a REGULAR user
-        _accessServiceMock
-            .Setup(a => a.SignInAsync(It.IsAny<User>()))
-            .ReturnsAsync(_mockRegularUser);
+        SetupSuccessfulValidation(_mockSignInValidator);
+        // Based on AccessService.cs, an Exception("Invalid credentials") is thrown
+        _mockAccessService.Setup(s => s.SignInAsync(It.IsAny<User>()))
+            .ThrowsAsync(new Exception("Invalid credentials"));
 
-        // ACT
-        var actualResult = await _sut.SignIn(validatorMock, _mockSignInRequest);
+        // Act & Assert
+        var thrownException = await Assert.ThrowsAsync<Exception>(() =>
+            _sut.SignIn(_mockSignInValidator.Object, request));
 
-        // ASSERT
-        var okResult = Assert.IsType<OkObjectResult>(actualResult);
-        var response = Assert.IsType<SignInUserResponse>(okResult.Value);
-
-        Assert.Equal(MockToken, response.Token);
-        Assert.Equal(_mockRegularUser.UserId, response.UserId);
-
-        // Verify JWT service was called ONLY with 'user' role
-        _jwtServiceMock.Verify(
-            j => j.GenerateJwt(
-                _mockRegularUser.UserId.ToString(),
-                It.Is<string[]>(roles => roles.Length == 1 && roles.Contains("user"))
-            ),
-            Times.Once);
-        _accessServiceMock.Verify(a => a.SignInAsync(It.IsAny<User>()), Times.Once);
+        Assert.Equal("Invalid credentials", thrownException.Message);
+        _mockJwtService.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
     }
 
     [Fact]
-    public async Task SignIn_With_InvalidRequest_Should_Throw_ValidationException()
+    public async Task SignIn_UserNotFound_ThrowsResourceNotFoundException()
     {
-        // ARRANGE
-        var validatorMock = new Mock<IValidator<SignInUserRequest>>();
+        // Arrange
+        var request = new SignInUserRequest { Username = "nonexistent", Password = "Password123" };
 
-        // Create the exception that ValidateAndThrowAsync would generate.
-        var validationFailures = new List<ValidationFailure> { new("Username", "Username is too short") };
-        var expectedException = new ValidationException(validationFailures);
+        SetupSuccessfulValidation(_mockSignInValidator);
+        // Based on AccessService.cs, a ResourceNotFoundException is thrown
+        _mockAccessService.Setup(s => s.SignInAsync(It.IsAny<User>()))
+            .ThrowsAsync(new ResourceNotFoundException(typeof(User), "Username", request.Username));
 
-        // Force the ValidateAsync setup to throw the ValidationException directly
-        validatorMock
-            .Setup(v => v.ValidateAsync(
-                It.IsAny<ValidationContext<SignInUserRequest>>(),
-                It.IsAny<CancellationToken>()))
-            .ThrowsAsync(expectedException);
+        // Act & Assert
+        await Assert.ThrowsAsync<ResourceNotFoundException>(() =>
+            _sut.SignIn(_mockSignInValidator.Object, request));
 
-        // Add redundant service setups to satisfy the Strict Mock (will not be called)
-        _accessServiceMock.Setup(a => a.SignInAsync(It.IsAny<User>())).ReturnsAsync(_mockRegularUser);
-
-        // ACT & ASSERT
-        await Assert.ThrowsAsync<ValidationException>(() => _sut.SignIn(validatorMock.Object, _mockSignInRequest));
-
-        // Verify services were NOT called
-        _accessServiceMock.Verify(a => a.SignInAsync(It.IsAny<User>()), Times.Never);
-        _jwtServiceMock.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
+        _mockJwtService.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
     }
 
     [Fact]
-    public async Task SignIn_WhenAccessServiceThrowsAuthenticationFailure_Should_PropagateException()
+    public async Task SignIn_ValidationFails_ThrowsValidationException()
     {
-        // ARRANGE
-        var validatorMock = Mock.Of<IValidator<SignInUserRequest>>();
+        // Arrange
+        var request = new SignInUserRequest { Username = "", Password = "" };
+        SetupFailedValidation(_mockSignInValidator);
 
-        // Mock service to throw when signing in (e.g., bad password/username, leading to Unauthorized in API layer)
-        var serviceException = new Exception("Invalid credentials.");
-        _accessServiceMock
-            .Setup(a => a.SignInAsync(It.IsAny<User>()))
-            .ThrowsAsync(serviceException);
+        // Act & Assert
+        await Assert.ThrowsAsync<ValidationException>(() =>
+            _sut.SignIn(_mockSignInValidator.Object, request));
 
-        // ACT & ASSERT
-        var actualException = await Assert.ThrowsAsync<Exception>(() => _sut.SignIn(validatorMock, _mockSignInRequest));
-        Assert.Equal(serviceException.Message, actualException.Message);
-
-        // Verify services were called appropriately
-        _accessServiceMock.Verify(a => a.SignInAsync(It.IsAny<User>()), Times.Once);
-        _jwtServiceMock.Verify(j => j.GenerateJwt(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
+        // Verify core logic was not executed
+        _mockAccessService.Verify(a => a.SignInAsync(It.IsAny<User>()), Times.Never);
     }
-
-    #endregion
 }

@@ -1,5 +1,6 @@
 ﻿using Cookbook.Core;
 using Cookbook.SharedData.Contracts.Requests;
+using Cookbook.SharedData.Contracts.Responses;
 using Cookbook.SharedData.Mappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,7 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
         await validator.ValidateAndThrowAsync(request);
 
         var user = await accessService.SignUpAsync(request.ToUser());
-        string[] roles = user.IsAdmin ? ["admin", "user"] : ["user"];
-        var userResponse = user.ToSignUpUserResponse();
-        userResponse.Token = jwtService.GenerateJwt(user.UserId.ToString(), roles);
-
-        return Ok(userResponse);
+        return GenerateAndSendTokenResponse(user.UserId, user.IsAdmin);
     }
 
     [HttpPost("signin")]
@@ -39,10 +36,14 @@ public class AuthenticationController(IJwtService jwtService, IAccessService acc
         await validator.ValidateAndThrowAsync(request);
 
         var user = await accessService.SignInAsync(request.ToUser());
-        string[] roles = user.IsAdmin ? ["admin", "user"] : ["user"];
-        var userResponse = user.ToSignInUserResponse();
-        userResponse.Token = jwtService.GenerateJwt(user.UserId.ToString(), roles);
+        return GenerateAndSendTokenResponse(user.UserId, user.IsAdmin);
+    }
 
-        return Ok(userResponse);
+    private IActionResult GenerateAndSendTokenResponse(int id, bool isAdmin)
+    {
+        string[] roles = isAdmin ? ["admin", "user"] : ["user"];
+        var token = jwtService.GenerateJwt(id.ToString(), roles);
+
+        return Ok(new JwtResponse { Token = token });
     }
 }

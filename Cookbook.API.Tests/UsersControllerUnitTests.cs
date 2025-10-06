@@ -20,7 +20,6 @@ public class UsersControllerUnitTests
     private readonly CreateUserRequest _mockCreateRequest = new()
     {
         Username = "newuser",
-        BirthDate = DateOnly.FromDateTime(DateTime.Now),
         Email = "something@mail.fr",
         IsAdmin = false,
         Password = "SecurePassword123"
@@ -29,7 +28,6 @@ public class UsersControllerUnitTests
     private readonly UpdateUserRequest _mockUpdateRequest = new()
     {
         Username = "updateduser",
-        BirthDate = DateOnly.FromDateTime(DateTime.Now),
         Email = "something@mail.fr",
         IsAdmin = false,
         Password = "SecurePassword123"
@@ -40,7 +38,6 @@ public class UsersControllerUnitTests
     {
         UserId = 1,
         Username = "testuser",
-        BirthDate = DateOnly.FromDateTime(DateTime.Now),
         Email = "something@mail.fr",
         ImagePath = "None",
         IsAdmin = false
