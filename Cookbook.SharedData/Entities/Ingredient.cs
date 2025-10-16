@@ -1,10 +1,10 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public class Ingredient
+public sealed class Ingredient
 {
     public short IngredientId { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; init; } = null!;
 
-    public virtual ICollection<RecipesIngredient> RecipesIngredients { get; set; } = new List<RecipesIngredient>();
+    public ICollection<RecipesIngredient> RecipesIngredients { get; init; } = new List<RecipesIngredient>();
 }

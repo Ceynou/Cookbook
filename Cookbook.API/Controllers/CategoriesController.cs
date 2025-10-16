@@ -30,7 +30,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetBy(int id)
     {
-        var category = await cookbookService.GetCategoryByAsync(id);
+        var category = await cookbookService.GetCategoryByAsync((short)id);
 
         var response = category.ToCategoryResponse();
 
@@ -63,7 +63,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     {
         await validator.ValidateAndThrowAsync(request);
 
-        var updatedCategory = await cookbookService.ModifyCategoryAsync(id, request.ToCategory());
+        var updatedCategory = await cookbookService.ModifyCategoryAsync((short)id, request.ToCategory());
 
         var response = updatedCategory.ToCategoryResponse();
 
@@ -76,7 +76,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(int id)
     {
-        await cookbookService.DeleteCategoryAsync(id);
+        await cookbookService.DeleteCategoryAsync((short)id);
 
         return NoContent();
     }

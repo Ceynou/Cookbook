@@ -1,28 +1,28 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public class Recipe
+public sealed class Recipe
 {
     public int RecipeId { get; set; }
 
-    public string Title { get; set; } = null!;
+    public string Title { get; init; } = null!;
 
-    public TimeSpan PreparationDuration { get; set; }
+    public TimeSpan PreparationDuration { get; init; }
 
-    public TimeSpan CookingDuration { get; set; }
+    public TimeSpan CookingDuration { get; init; }
 
-    public short Difficulty { get; set; }
+    public short Difficulty { get; init; }
 
-    public string ImagePath { get; set; } = null!;
+    public string ImagePath { get; init; } = null!;
 
     public int? CreatorId { get; set; }
 
-    public virtual User? Creator { get; set; }
+    public User? Creator { get; init; }
 
-    public virtual ICollection<RecipesIngredient> RecipesIngredients { get; set; } = new List<RecipesIngredient>();
+    public ICollection<RecipesIngredient> RecipesIngredients { get; set; } = new List<RecipesIngredient>();
 
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<Review> Reviews { get; init; } = new List<Review>();
 
-    public virtual ICollection<Step> Steps { get; set; } = new List<Step>();
+    public ICollection<Step> Steps { get; set; } = new List<Step>();
 
-    public virtual ICollection<RecipesCategory> RecipesCategories { get; set; } = new List<RecipesCategory>();
+    public ICollection<RecipesCategory> RecipesCategories { get; set; } = new List<RecipesCategory>();
 }

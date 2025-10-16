@@ -1,20 +1,20 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public class User
+public sealed class User
 {
-    public int UserId { get; set; }
+    public int UserId { get; init; }
 
-    public string Username { get; set; } = null!;
+    public string Username { get; init; } = null!;
 
-    public string Email { get; set; } = null!;
+    public string Email { get; init; } = null!;
 
     public string PasswordHash { get; set; } = null!;
 
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; init; }
 
-    public string? ImagePath { get; set; }
+    public string? ImagePath { get; init; }
 
-    public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
+    public ICollection<Recipe> Recipes { get; init; } = new List<Recipe>();
 
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<Review> Reviews { get; init; } = new List<Review>();
 }

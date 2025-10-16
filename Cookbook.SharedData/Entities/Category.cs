@@ -1,10 +1,10 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public class Category
+public sealed class Category
 {
     public short CategoryId { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; init; } = null!;
 
-    public virtual ICollection<RecipesCategory> RecipesCategories { get; set; } = new List<RecipesCategory>();
+    public ICollection<RecipesCategory> RecipesCategories { get; init; } = new List<RecipesCategory>();
 }

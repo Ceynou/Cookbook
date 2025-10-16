@@ -25,7 +25,7 @@ public static class ContractToDomainMapper
                 {
                     CategoryId = c.CategoryId
                 })
-                .ToList() ?? [],
+                .ToList(),
             RecipesIngredients = createRecipeRequest.Ingredients.Select(i => new RecipesIngredient
             {
                 IngredientId = i.IngredientId,
@@ -62,14 +62,14 @@ public static class ContractToDomainMapper
                 {
                     CategoryId = c.CategoryId
                 })
-                .ToList() ?? [],
+                .ToList(),
             RecipesIngredients = updateRecipeRequest.Ingredients
                 .Select(i => new RecipesIngredient
                 {
                     IngredientId = i.IngredientId,
                     Quantity = i.Quantity,
                     Unit = i.Unit ?? string.Empty
-                }).ToList() ?? [],
+                }).ToList(),
             Steps = updateRecipeRequest.Steps.OrderBy(s => s.StepNumber)
                 .Select((s, index) => new Step
                 {
@@ -77,7 +77,7 @@ public static class ContractToDomainMapper
                     Instruction = s.Instruction,
                     Duration = s.Duration,
                     IsCooking = s.IsCooking
-                }).ToList() ?? []
+                }).ToList()
         };
     }
 
@@ -97,28 +97,6 @@ public static class ContractToDomainMapper
             Username = signUpUserRequest.Username,
             Email = signUpUserRequest.Email,
             PasswordHash = signUpUserRequest.Password
-        };
-    }
-
-    public static User ToUser(this CreateUserRequest createUserRequest)
-    {
-        return new User
-        {
-            Username = createUserRequest.Username,
-            PasswordHash = createUserRequest.Password,
-            Email = createUserRequest.Email,
-            IsAdmin = createUserRequest.IsAdmin
-        };
-    }
-
-    public static User ToUser(this UpdateUserRequest updateUserRequest)
-    {
-        return new User
-        {
-            Username = updateUserRequest.Username,
-            PasswordHash = updateUserRequest.Password,
-            Email = updateUserRequest.Email,
-            IsAdmin = updateUserRequest.IsAdmin
         };
     }
 

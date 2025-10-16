@@ -67,6 +67,7 @@ CREATE TABLE
 
 -- TODOs Avoid, where possible, concatenating two table names together to create the name of a relationship table. 
 -- Rather than cars_mechanics prefer services.
+-- Maybe IngredientQuantity.
 -- Placing the value in one column and the units in another column. 
 -- The column should make the units self-evident to prevent the requirement to combine columns again later in the application. 
 -- Use CHECK() to ensure valid data is inserted into the column.
@@ -82,6 +83,7 @@ CREATE TABLE
     CONSTRAINT cc_quantity_positive CHECK (quantity > 0)
   );
 
+-- Maybe RecipeClassification.
 CREATE TABLE
   recipes_categories (
     recipe_id INTEGER NOT NULL,

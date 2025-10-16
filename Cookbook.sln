@@ -7,11 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.API", "Cookbook.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.Core", "Cookbook.Core\Cookbook.Core.csproj", "{69BE3EB1-040B-46A6-9C71-784B80725A46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.Data", "Cookbook.Data\Cookbook.Data.csproj", "{99DA8687-271B-499E-8DD0-C78061AF92E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.Infrastructure", "Cookbook.Infrastructure\Cookbook.Infrastructure.csproj", "{99DA8687-271B-499E-8DD0-C78061AF92E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.SharedData", "Cookbook.SharedData\Cookbook.SharedData.csproj", "{DF539394-2690-4DC4-8297-1F7DE139514B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.API.Tests", "Cookbook.API.Tests\Cookbook.API.Tests.csproj", "{ADA8A26B-2B1D-4939-AADF-08ABD4488161}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.API.UnitTests", "Cookbook.API.UnitTests\Cookbook.API.UnitTests.csproj", "{ADA8A26B-2B1D-4939-AADF-08ABD4488161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cookbook.API.IntegrationTests", "Cookbook.API.IntegrationTests\Cookbook.API.IntegrationTests.csproj", "{A0CD981C-0882-4AA8-B01B-6D9C66264860}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,18 @@ Global
 		{ADA8A26B-2B1D-4939-AADF-08ABD4488161}.Release|x64.Build.0 = Release|Any CPU
 		{ADA8A26B-2B1D-4939-AADF-08ABD4488161}.Release|x86.ActiveCfg = Release|Any CPU
 		{ADA8A26B-2B1D-4939-AADF-08ABD4488161}.Release|x86.Build.0 = Release|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Release|x64.Build.0 = Release|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0CD981C-0882-4AA8-B01B-6D9C66264860}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

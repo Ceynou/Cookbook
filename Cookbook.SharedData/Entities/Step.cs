@@ -1,16 +1,16 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public class Step
+public sealed class Step
 {
-    public int RecipeId { get; set; }
+    public int RecipeId { get; init; }
 
-    public short StepNumber { get; set; }
+    public short StepNumber { get; init; }
 
-    public string Instruction { get; set; } = null!;
+    public string Instruction { get; init; } = null!;
 
-    public TimeSpan Duration { get; set; }
+    public TimeSpan Duration { get; init; }
 
-    public bool IsCooking { get; set; }
+    public bool IsCooking { get; init; }
 
-    public virtual Recipe Recipe { get; set; } = null!;
+    public Recipe Recipe { get; init; } = null!;
 }

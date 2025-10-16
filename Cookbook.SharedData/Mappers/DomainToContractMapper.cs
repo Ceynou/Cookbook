@@ -15,7 +15,7 @@ public static class DomainToContractMapper
             CookingDuration = recipe.CookingDuration,
             Difficulty = recipe.Difficulty,
             ImagePath = recipe.ImagePath,
-            CreatorId = recipe.CreatorId ?? 0, // TODO Problem?
+            CreatorId = recipe.CreatorId ?? 0,
             CreatorUsername = recipe.Creator?.Username ?? string.Empty,
             CreatorProfilePicture = recipe.Creator?.ImagePath ?? string.Empty,
             IngredientsCount = recipe.RecipesIngredients.Count,
@@ -46,7 +46,7 @@ public static class DomainToContractMapper
         };
     }
 
-    public static StepResponse ToStepResponse(this Step step)
+    private static StepResponse ToStepResponse(this Step step)
     {
         return new StepResponse
         {
@@ -57,18 +57,18 @@ public static class DomainToContractMapper
         };
     }
 
-    public static ReviewResponse ToReviewResponse(this Review review)
+    private static ReviewResponse ToReviewResponse(this Review review)
     {
         return new ReviewResponse
         {
             ReviewerId = review.ReviewerId,
-            Username = review.Reviewer?.Username ?? string.Empty,
+            Username = review.Reviewer.Username,
             Rating = review.Rating,
             Impression = review.Impression
         };
     }
 
-    public static RecipeIngredientResponse ToRecipeIngredientResponse(this RecipesIngredient recipeIngredient)
+    private static RecipeIngredientResponse ToRecipeIngredientResponse(this RecipesIngredient recipeIngredient)
     {
         return new RecipeIngredientResponse
         {
@@ -78,22 +78,11 @@ public static class DomainToContractMapper
         };
     }
 
-    public static RecipeCategoryResponse ToRecipeCategoryResponse(this RecipesCategory recipeCategory)
+    private static RecipeCategoryResponse ToRecipeCategoryResponse(this RecipesCategory recipeCategory)
     {
         return new RecipeCategoryResponse
         {
             CategoryId = recipeCategory.CategoryId
-        };
-    }
-
-    public static UserResponse ToUserResponse(this User user)
-    {
-        return new UserResponse
-        {
-            UserId = user.UserId,
-            Username = user.Username,
-            Email = user.Email,
-            IsAdmin = user.IsAdmin
         };
     }
 

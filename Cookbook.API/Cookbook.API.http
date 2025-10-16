@@ -1,16 +1,20 @@
-GET {{Cookbook}}/api/cookbook/Recipes/
-Accept: application/json
-
 ###
 POST {{Cookbook}}/api/Authentication/signup
 Content-Type: application/json
 
 {
-  "Username": "UserTest2",
-  "Email": "tester2@tester.fr",
-  "BirthDate": "2000-10-02",
-  "Password": "verysecurepassord"
+  "Username": "adminwannabe",
+  "Email": "adminwannabe@adminwannabe.com",
+  "Password": "adminwannabe"
 }
+> {%
+    if (response.status === 200 || response.status === 201) {
+        client.global.set('auth_token', response.body.token);
+    } else {
+        client.log('Sign-Up failed with status: ' + response.status);
+        client.global.clear('auth_token'); // Clear token if sign-in fails
+    }
+%}
 
 ###
 
@@ -18,9 +22,8 @@ POST {{Cookbook}}/api/Authentication/signin
 Content-Type: application/json
 
 {
-  "Username": "UserTest2",
-  "Email": "tester2@tester.fr",
-  "Password": "verysecurepassord"
+  "Username": "adminwannabe",
+  "Password": "adminwannabe"
 }
 > {%
     if (response.status === 200 || response.status === 201) {
@@ -64,7 +67,7 @@ Authorization: Bearer {{auth_token}}
 }
 
 ###
-PUT {{Cookbook}}/api/cookbook/Recipes/18
+PUT {{Cookbook}}/api/cookbook/Recipes/12
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -75,13 +78,16 @@ Authorization: Bearer {{auth_token}}
   "ingredients": [
     {
       "ingredientId": 1,
-      "quantity": 1,
-      "unit": null
+      "quantity": 2,
+      "unit": "help"
     }
   ],
   "categories": [
     {
-      "categoryId": 1
+      "categoryId": 2
+    },
+    {
+      "categoryId": 3
     }
   ],
   "steps": [
@@ -90,11 +96,26 @@ Authorization: Bearer {{auth_token}}
       "instruction": "sdf",
       "duration": "20:20:20",
       "isCooking": true
+    },
+    {
+      "stepNumber": 2,
+      "instruction": "sdfsdfdfg",
+      "duration": "00:20:20",
+      "isCooking": true
     }
   ]
 }
 
 ###
-GET {{Cookbook}}/api/cookbook/users/admin
+POST {{Cookbook}}/api/cookbook/Categories/
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "Testeded"
+}
+
+###
+GET {{Cookbook}}/api/cookbook/Recipes/13/full
 Authorization: Bearer {{auth_token}}
 Accept: application/json

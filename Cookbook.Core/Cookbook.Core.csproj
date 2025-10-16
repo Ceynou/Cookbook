@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Cookbook.Data\Cookbook.Data.csproj"/>
+        <ProjectReference Include="..\Cookbook.Infrastructure\Cookbook.Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -15,9 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
-            <HintPath>..\..\..\..\..\..\program files\dotnet\shared\Microsoft.AspNetCore.App\10.0.0-rc.1.25451.107\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-        </Reference>
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0"/>
     </ItemGroup>
 
 </Project>

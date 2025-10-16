@@ -1,16 +1,16 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public class RecipesIngredient
+public sealed class RecipesIngredient
 {
-    public int RecipeId { get; set; }
+    public int RecipeId { get; init; }
 
-    public short IngredientId { get; set; }
+    public short IngredientId { get; init; }
 
-    public decimal Quantity { get; set; }
+    public decimal Quantity { get; init; }
 
-    public string? Unit { get; set; }
+    public string? Unit { get; init; }
 
-    public virtual Ingredient Ingredient { get; set; } = null!;
+    public Ingredient Ingredient { get; init; } = null!;
 
-    public virtual Recipe Recipe { get; set; } = null!;
+    public Recipe Recipe { get; init; } = null!;
 }
