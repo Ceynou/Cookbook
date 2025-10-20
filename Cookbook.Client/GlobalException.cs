@@ -10,16 +10,12 @@ public static class GlobalException
     public static void HandleThreadException(object sender, ThreadExceptionEventArgs e)
     {
         var ex = e.Exception;
-
-        // Affiche du message d'erreur
         MessageBox.Show(GetErrorMessage(ex), "Erreur d'application", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     public static void HandleException(object sender, UnhandledExceptionEventArgs e)
     {
         var ex = e.ExceptionObject as Exception;
-
-        // Affiche du message d'erreur
         MessageBox.Show(GetErrorMessage(ex), "Erreur d'application", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
