@@ -28,6 +28,14 @@ jobs:
            - 5432:5432
 
     steps:
+    - name: Start PostgreSQL on Ubuntu
+      run: |
+        sudo systemctl start postgresql.service
+        pg_isready
+
+        - name: Create additional user
+          run: |
+            sudo -u postgres psql --command="CREATE USER postgres PASSWORD 'password'" --command="\du"
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
