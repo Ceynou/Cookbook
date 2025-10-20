@@ -142,14 +142,14 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
     public async Task GetAll_AsRegularUser_ReturnsOkWithRecipes()
     {
         // Arrange
-        await SignIn("admin", "admin");
+        await SignIn("user", "user");
 
         // Act
         var response = await HttpClient.GetAsync("/api/cookbook/Recipes");
         var recipes = await response.Content.ReadFromJsonAsync<List<RecipeResponse>>();
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         Assert.NotNull(recipes);
         Assert.NotEmpty(recipes);
     }

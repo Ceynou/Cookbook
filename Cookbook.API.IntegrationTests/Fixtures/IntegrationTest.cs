@@ -11,12 +11,12 @@ namespace Cookbook.API.IntegrationTests.Fixtures;
 
 public abstract class IntegrationTest(APiWebApplicationFactory webApi) : IClassFixture<APiWebApplicationFactory>
 {
-    protected HttpClient HttpClient { get; set; } = webApi.CreateClient();
+    protected HttpClient HttpClient { get; } = webApi.CreateClient();
     private IConfiguration Configuration { get; set; } = webApi.Configuration;
 
     protected async Task SignIn(string username, string password)
     {
-        var httpResponse = await HttpClient.PostAsJsonAsync<SignInUserRequest>("/api/Authentication/signin",
+        var httpResponse = await HttpClient.PostAsJsonAsync("/api/Authentication/signin",
             new SignInUserRequest
             {
                 Username = username,

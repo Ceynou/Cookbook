@@ -12,10 +12,6 @@ namespace Cookbook.API.UnitTests;
 
 public class CookbookServiceTests : IDisposable
 {
-    private const short CategoryId = 1;
-    private const short NonExistingCategoryId = 0;
-    private const short IngredientId = 1;
-    private const short NonExistingIngredientId = 0;
     private readonly CookbookContext _context;
     private readonly CookbookService _cookbookService;
     private readonly Mock<IHttpContextAccessor> _mockHttpContextAccessor;
@@ -141,30 +137,6 @@ public class CookbookServiceTests : IDisposable
         var savedRecipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Title == "New Recipe");
         Assert.NotNull(savedRecipe);
     }
-
-    // [Fact]
-    // public async Task CreateRecipeAsync_WithoutHttpContext_CreatesRecipeWithoutCreatorId()
-    // {
-    //     // Arrange
-    //     _mockHttpContextAccessor.Setup(x => x.HttpContext).Returns((HttpContext)null);
-    //     
-    //     var recipe = new Recipe
-    //     {
-    //         Title = "New Recipe",
-    //         Difficulty = 2,
-    //         CookingDuration = TimeSpan.FromMinutes(30),
-    //         PreparationDuration = TimeSpan.FromMinutes(15),
-    //         ImagePath = "image.png"
-    //     };
-    //
-    //     // Act
-    //     var result = await _cookbookService.CreateRecipeAsync(recipe);
-    //
-    //     // Assert
-    //     Assert.NotNull(result);
-    //     Assert.Equal("New Recipe", result.Title);
-    //     Assert.Equal(0, result.CreatorId); // Default value when no user context
-    // }
 
     [Fact]
     public async Task ModifyRecipeAsync_WithExistingRecipe_UpdatesAndReturnsRecipe()

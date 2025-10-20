@@ -24,7 +24,7 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(response);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -37,7 +37,7 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(response);
     }
 
-    [HttpGet("{id:int}/full")]
+    [HttpGet("{id}/full")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -66,7 +66,7 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return CreatedAtAction(nameof(GetBy), new { id = response.RecipeId }, response);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -81,7 +81,7 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(updatedRecipe.ToRecipeResponse());
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

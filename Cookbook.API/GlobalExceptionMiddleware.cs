@@ -1,4 +1,5 @@
-﻿using Cookbook.SharedData.Exceptions;
+﻿using Cookbook.SharedData;
+using Cookbook.SharedData.Exceptions;
 using FluentValidation;
 
 namespace Cookbook.API;
@@ -81,11 +82,5 @@ public class GlobalExceptionMiddleware(
                 return context.Response.WriteAsJsonAsync(response);
             }
         }
-    }
-
-    private record ErrorResponse
-    {
-        public required string Error { get; set; }
-        public required string Details { get; set; }
     }
 }

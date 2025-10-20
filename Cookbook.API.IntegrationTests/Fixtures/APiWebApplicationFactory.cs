@@ -7,11 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.PostgreSql;
-using Xunit;
 
 namespace Cookbook.API.IntegrationTests.Fixtures;
 
-public class APiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+// ReSharper disable once ClassNeverInstantiated.Global
+public class APiWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
         .WithImage("postgres")
@@ -41,7 +41,6 @@ public class APiWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        var connectionString = _dbContainer.GetConnectionString();
         builder.ConfigureAppConfiguration(config =>
         {
             Configuration = new ConfigurationBuilder()

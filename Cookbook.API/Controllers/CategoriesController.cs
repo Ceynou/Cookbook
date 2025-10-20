@@ -10,7 +10,7 @@ namespace Cookbook.API.Controllers;
 [Authorize(Roles = "admin,user")]
 [Route("api/cookbook/[controller]")]
 [ApiController]
-public class CategoriesController(ICookbookService cookbookService) : Controller
+public class CategoriesController(ICookbookService cookbookService) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -24,7 +24,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
         return Ok(response);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -53,7 +53,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
         return CreatedAtAction(nameof(GetBy), new { id = createdCategory.CategoryId }, response);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,7 +70,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
         return Ok(response);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
