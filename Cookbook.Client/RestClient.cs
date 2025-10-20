@@ -1,13 +1,17 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Cookbook.Client;
 
 public class RestClient
 {
-    private static readonly HttpClient _httpClient = new();
+    private static readonly HttpClient HttpClient = new();
 
     public required string BaseUrl { get; set; }
 
@@ -19,7 +23,7 @@ public class RestClient
     {
         var response = await SendAsync(HttpMethod.Get, endpoint, null, customHeaders);
 
-        var contentLength = response.Content?.Headers?.ContentLength;
+        var contentLength = response.Content.Headers.ContentLength;
         if (response.StatusCode == HttpStatusCode.NoContent || contentLength == 0 || contentLength is null)
             return default;
 
@@ -53,7 +57,7 @@ public class RestClient
         HttpResponseMessage response;
         try
         {
-            response = await _httpClient.SendAsync(httpRequest);
+            response = await HttpClient.SendAsync(httpRequest);
         }
         catch (Exception)
         {
@@ -82,18 +86,18 @@ public class RestClient
 
     #region POST
 
-    public async Task<T?> PostAsync<T, C>(string endpoint, C content, Dictionary<string, string>? customHeaders = null)
+    public async Task<T?> PostAsync<T, TC>(string endpoint, TC content, Dictionary<string, string>? customHeaders = null)
     {
         var response = await SendAsync(HttpMethod.Post, endpoint, JsonContent.Create(content), customHeaders);
 
-        var contentLength = response.Content?.Headers?.ContentLength;
+        var contentLength = response.Content.Headers.ContentLength;
         if (response.StatusCode == HttpStatusCode.NoContent || contentLength == 0 || contentLength is null)
             return default;
 
         return await response.Content.ReadJsonSafeAsync<T>();
     }
 
-    public async Task PostAsync<C>(string endpoint, C content, Dictionary<string, string>? customHeaders = null)
+    public async Task PostAsync<TC>(string endpoint, TC content, Dictionary<string, string>? customHeaders = null)
     {
         await SendAsync(HttpMethod.Post, endpoint, JsonContent.Create(content), customHeaders);
     }
@@ -107,19 +111,19 @@ public class RestClient
 
     #region PUT
 
-    public async Task<T?> PutAsync<T, C>(string endpoint, C content, Dictionary<string, string>? customHeaders = null)
+    public async Task<T?> PutAsync<T, TC>(string endpoint, TC content, Dictionary<string, string>? customHeaders = null)
     {
         var response = await SendAsync(HttpMethod.Put, endpoint, JsonContent.Create(content), customHeaders);
 
         // Si la réponse est vide (NoContent ou Content-Length = 0 ou null), retourne default
-        var contentLength = response.Content?.Headers?.ContentLength;
+        var contentLength = response.Content.Headers.ContentLength;
         if (response.StatusCode == HttpStatusCode.NoContent || contentLength == 0 || contentLength is null)
             return default;
 
         return await response.Content.ReadJsonSafeAsync<T>();
     }
 
-    public async Task PutAsync<C>(string endpoint, C content, Dictionary<string, string>? customHeaders = null)
+    public async Task PutAsync<TC>(string endpoint, TC content, Dictionary<string, string>? customHeaders = null)
     {
         await SendAsync(HttpMethod.Put, endpoint, JsonContent.Create(content), customHeaders);
     }
@@ -138,7 +142,12 @@ public class RestClient
         var response = await SendAsync(HttpMethod.Delete, endpoint, null, customHeaders);
 
         // Si la réponse est vide (NoContent ou Content-Length = 0 ou null), retourne default
-        var contentLength = response.Content?.Headers?.ContentLength;
+        long? contentLength;
+        if (response.Content.Headers != null)
+            contentLength = response.Content.Headers.ContentLength;
+        else
+            contentLength = null;
+
         if (response.StatusCode == HttpStatusCode.NoContent || contentLength == 0 || contentLength is null)
             return default;
 
@@ -155,7 +164,7 @@ public class RestClient
 
 public class RestClientException : Exception
 {
-    private static readonly JsonSerializerOptions serializerOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
     private readonly string? _rawContent;
 
@@ -181,7 +190,7 @@ public class RestClientException : Exception
 
         try
         {
-            content = JsonSerializer.Deserialize<T>(_rawContent, serializerOptions);
+            content = JsonSerializer.Deserialize<T>(_rawContent, SerializerOptions);
             return true;
         }
         catch (Exception)
@@ -194,13 +203,13 @@ public class RestClientException : Exception
 
 public static class HttpContentExtensions
 {
-    private static readonly JsonSerializerOptions serializerOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
     public static async Task<T?> ReadJsonSafeAsync<T>(this HttpContent content)
     {
         try
         {
-            return await content.ReadFromJsonAsync<T>(serializerOptions);
+            return await content.ReadFromJsonAsync<T>(SerializerOptions);
         }
         catch (JsonException)
         {
