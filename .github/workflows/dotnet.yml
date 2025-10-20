@@ -13,29 +13,7 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
-    services:
-       postgres:
-         image: postgres
-         env:
-           POSTGRES_USER: postgres
-           POSTGRES_PASSWORD: password
-         options: >-
-           --health-cmd pg_isready
-           --health-interval 10s
-           --health-timeout 5s
-           --health-retries 5
-         ports:
-           - 5432:5432
-
     steps:
-    - name: Start PostgreSQL on Ubuntu
-      run: |
-        sudo systemctl start postgresql.service
-        pg_isready
-
-        - name: Create additional user
-          run: |
-            sudo -u postgres psql --command="CREATE USER postgres PASSWORD 'password'" --command="\du"
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -45,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore API-continuous-integration.slnf
     - name: Build
-      run: dotnet build API-continuous-integration.slnf --no-restore 
+      run: dotnet build API-continuous-integration.slnf --no-restore
     - name: Test
       run: dotnet test API-continuous-integration.slnf --no-build --verbosity normal
