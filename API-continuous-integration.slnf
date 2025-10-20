@@ -1,0 +1,13 @@
+{
+  "solution": {
+    "path": "Cookbook.sln",
+    "projects": [
+      "Cookbook.API.IntegrationTests\\Cookbook.API.IntegrationTests.csproj",
+      "Cookbook.API.UnitTests\\Cookbook.API.UnitTests.csproj",
+      "Cookbook.API\\Cookbook.API.csproj",
+      "Cookbook.Core\\Cookbook.Core.csproj",
+      "Cookbook.Infrastructure\\Cookbook.Infrastructure.csproj",
+      "Cookbook.SharedData\\Cookbook.SharedData.csproj"
+    ]
+  }
+}
