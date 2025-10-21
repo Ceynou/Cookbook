@@ -43,9 +43,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore API-continuous-integration.slnf
     - name: Build
-      run: dotnet build API-continuous-integration.slnf --no-restore
+      run: dotnet build API-continuous-integration.slnf --no-restore --configuration Release
     - name: Test
-      run: dotnet test API-continuous-integration.slnf --no-build --verbosity normal
+      run: dotnet test API-continuous-integration.slnf --no-build --verbosity normal --configuration Release
       env:
         # The hostname used to communicate with the PostgreSQL service container
         POSTGRES_HOST: localhost
