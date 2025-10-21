@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cookbook.API.Controllers;
 
-[Authorize(Roles = "admin,user")]
 [Route("api/cookbook/[controller]")]
 [ApiController]
 public class RecipesController(ICookbookService cookbookService) : ControllerBase
 {
-    [HttpGet]
+		[Authorize]
+		[HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
@@ -24,7 +24,8 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+		[Authorize]
+		[HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -37,7 +38,8 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(response);
     }
 
-    [HttpGet("{id}/full")]
+		[Authorize]
+		[HttpGet("{id}/full")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -50,7 +52,8 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(response);
     }
 
-    [HttpPost]
+		[Authorize(Roles = "admin")]
+		[HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -66,7 +69,8 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return CreatedAtAction(nameof(GetBy), new { id = response.RecipeId }, response);
     }
 
-    [HttpPut("{id}")]
+		[Authorize(Roles = "admin")]
+		[HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -81,7 +85,8 @@ public class RecipesController(ICookbookService cookbookService) : ControllerBas
         return Ok(updatedRecipe.ToRecipeResponse());
     }
 
-    [HttpDelete("{id}")]
+		[Authorize(Roles = "admin")]
+		[HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

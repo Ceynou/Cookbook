@@ -149,7 +149,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         var recipes = await response.Content.ReadFromJsonAsync<List<RecipeResponse>>();
 
         // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(recipes);
         Assert.NotEmpty(recipes);
     }
@@ -319,10 +319,10 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
     }
 
     [Fact]
-    public async Task Create_AsRegularUser_ReturnsCreatedWithRecipe()
+    public async Task Create_AsRegularUser_ReturnsForbidden()
     {
         // Arrange
-        await SignIn("admin", "admin");
+        await SignIn("user", "user");
         var request = new CreateRecipeRequest
         {
             Title = "User Recipe",
@@ -335,12 +335,9 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
 
         // Act
         var response = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", request);
-        var createdRecipe = await response.Content.ReadFromJsonAsync<RecipeResponse>();
 
         // Assert
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        Assert.NotNull(createdRecipe);
-        Assert.Equal(request.Title, createdRecipe.Title);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     #endregion
