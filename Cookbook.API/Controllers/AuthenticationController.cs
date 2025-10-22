@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cookbook.API.Controllers;
 
 [AllowAnonymous]
-[Route("api/[controller]")]
+[Route("v1/[controller]")]
 [ApiController]
 public class AuthenticationController(IJwtService jwtService, IAccessService accessService) : ControllerBase
 {

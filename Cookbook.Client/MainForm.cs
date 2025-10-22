@@ -5,14 +5,52 @@ namespace Cookbook.Client;
 
 public partial class MainForm : Window
 {
-    public MainForm()
-    {
-        Localization.Provider = new Localizer();
-        "en-US".SetLanguage();
-        InitializeComponent();
-    }
+	public MainForm()
+	{
+		Localization.Provider = new Localizer();
+		"en-US".SetLanguage();
+		InitializeComponent();
+		
+		
+		PageHeader pageHeader = new()
+		{
+			Dock = DockStyle.Top,
+			ShowButton = true,
+			ShowBack = true,
+			ShowIcon = true
+		};
+		Controls.Add(pageHeader);
 
-    private void label1_Click(object sender, EventArgs e)
-    {
-    }
+		VirtualPanel virtualPanel = new()
+		{
+			Dock = DockStyle.Fill,
+			AlignItems = TAlignItems.Center,
+			JustifyContent = TJustifyContent.Center
+		};
+		Controls.Add(virtualPanel);
+
+		VirtualPanel virtualPanel2 = new();
+		virtualPanel2.Controls.Add(new VirtualPanel());
+		virtualPanel.Controls.Add(virtualPanel2);
+
+		AntdUI.Label usernameLabel = new();
+		usernameLabel.Text = "username";
+		virtualPanel2.Controls.Add(usernameLabel);
+
+		AntdUI.Input usernameInput = new();
+		virtualPanel2.Controls.Add(usernameInput);
+
+		AntdUI.Label passwordLabel = new();
+		passwordLabel.Text = "password";
+		virtualPanel2.Controls.Add(passwordLabel);
+
+		AntdUI.Input passwordInput = new();
+		virtualPanel2.Controls.Add(passwordInput);
+
+		AntdUI.Button logIn = new();
+		logIn.Text = "Log In";
+		virtualPanel2.Controls.Add(logIn);
+		
+	}
+	
 }

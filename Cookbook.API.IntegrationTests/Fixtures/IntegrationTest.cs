@@ -16,7 +16,7 @@ public abstract class IntegrationTest(APiWebApplicationFactory webApi) : IClassF
 
     protected async Task SignIn(string username, string password)
     {
-        var httpResponse = await HttpClient.PostAsJsonAsync("/api/Authentication/signin",
+        var httpResponse = await HttpClient.PostAsJsonAsync("/v1/authentication/signin",
             new SignInUserRequest
             {
                 Username = username,

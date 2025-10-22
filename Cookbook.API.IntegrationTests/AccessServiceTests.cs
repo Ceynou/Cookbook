@@ -7,12 +7,12 @@ using Xunit;
 
 namespace Cookbook.API.IntegrationTests;
 
-public class AccessServiceIntegrationTests : IntegrationTest
+public class AccessServiceTests : IntegrationTest
 {
     private readonly IAccessService _accessService;
     private readonly IPasswordHasher _passwordHasher;
 
-    public AccessServiceIntegrationTests(APiWebApplicationFactory webApi) : base(webApi)
+    public AccessServiceTests(APiWebApplicationFactory webApi) : base(webApi)
     {
         var scope = webApi.Services.CreateScope();
         _accessService = scope.ServiceProvider.GetRequiredService<IAccessService>();

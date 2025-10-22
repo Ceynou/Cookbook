@@ -65,13 +65,13 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
             Categories = [_createRecipeCategoryRequest],
             Steps = [_createStepRequest]
         };
-        var createResponse = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", createRequest);
+        var createResponse = await HttpClient.PostAsJsonAsync("/v1/cookbook/Recipes", createRequest);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
         var createdRecipe = await createResponse.Content.ReadFromJsonAsync<RecipeResponse>();
         Assert.NotNull(createdRecipe);
 
         // Read
-        var readResponse = await HttpClient.GetAsync($"/api/cookbook/Recipes/{createdRecipe.RecipeId}");
+        var readResponse = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{createdRecipe.RecipeId}");
         Assert.Equal(HttpStatusCode.OK, readResponse.StatusCode);
         var readRecipe = await readResponse.Content.ReadFromJsonAsync<RecipeResponse>();
         Assert.NotNull(readRecipe);
@@ -88,18 +88,18 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
             Steps = [_updateStepRequest]
         };
         var updateResponse =
-            await HttpClient.PutAsJsonAsync($"/api/cookbook/Recipes/{createdRecipe.RecipeId}", updateRequest);
+            await HttpClient.PutAsJsonAsync($"/v1/cookbook/Recipes/{createdRecipe.RecipeId}", updateRequest);
         Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
         var updatedRecipe = await updateResponse.Content.ReadFromJsonAsync<RecipeResponse>();
         Assert.NotNull(updatedRecipe);
         Assert.Equal(updateRequest.Title, updatedRecipe.Title);
 
         // Delete
-        var deleteResponse = await HttpClient.DeleteAsync($"/api/cookbook/Recipes/{createdRecipe.RecipeId}");
+        var deleteResponse = await HttpClient.DeleteAsync($"/v1/cookbook/Recipes/{createdRecipe.RecipeId}");
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
 
         // Verify deletion
-        var verifyResponse = await HttpClient.GetAsync($"/api/cookbook/Recipes/{createdRecipe.RecipeId}");
+        var verifyResponse = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{createdRecipe.RecipeId}");
         Assert.Equal(HttpStatusCode.NotFound, verifyResponse.StatusCode);
     }
 
@@ -115,7 +115,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         await SignIn("admin", "admin");
 
         // Act
-        var response = await HttpClient.GetAsync("/api/cookbook/Recipes");
+        var response = await HttpClient.GetAsync("/v1/cookbook/Recipes");
         var recipes = await response.Content.ReadFromJsonAsync<List<RecipeResponse>>();
 
         // Assert
@@ -132,7 +132,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         SignOut();
 
         // Act
-        var response = await HttpClient.GetAsync("/api/cookbook/Recipes");
+        var response = await HttpClient.GetAsync("/v1/cookbook/Recipes");
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -145,7 +145,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         await SignIn("user", "user");
 
         // Act
-        var response = await HttpClient.GetAsync("/api/cookbook/Recipes");
+        var response = await HttpClient.GetAsync("/v1/cookbook/Recipes");
         var recipes = await response.Content.ReadFromJsonAsync<List<RecipeResponse>>();
 
         // Assert
@@ -166,7 +166,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int recipeId = 1;
 
         // Act
-        var response = await HttpClient.GetAsync($"/api/cookbook/Recipes/{recipeId}");
+        var response = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{recipeId}");
         var recipe = await response.Content.ReadFromJsonAsync<RecipeResponse>();
 
         // Assert
@@ -184,7 +184,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int nonExistentRecipeId = 9999;
 
         // Act
-        var response = await HttpClient.GetAsync($"/api/cookbook/Recipes/{nonExistentRecipeId}");
+        var response = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{nonExistentRecipeId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -198,7 +198,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int recipeId = 1;
 
         // Act
-        var response = await HttpClient.GetAsync($"/api/cookbook/Recipes/{recipeId}");
+        var response = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{recipeId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -216,7 +216,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int recipeId = 1;
 
         // Act
-        var response = await HttpClient.GetAsync($"/api/cookbook/Recipes/{recipeId}/full");
+        var response = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{recipeId}/full");
         var recipe = await response.Content.ReadFromJsonAsync<RecipeDetailResponse>();
 
         // Assert
@@ -237,7 +237,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int nonExistentRecipeId = 9999;
 
         // Act
-        var response = await HttpClient.GetAsync($"/api/cookbook/Recipes/{nonExistentRecipeId}/full");
+        var response = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{nonExistentRecipeId}/full");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -263,7 +263,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", request);
+        var response = await HttpClient.PostAsJsonAsync("/v1/cookbook/Recipes", request);
         var createdRecipe = await response.Content.ReadFromJsonAsync<RecipeResponse>();
 
         // Assert
@@ -290,7 +290,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", request);
+        var response = await HttpClient.PostAsJsonAsync("/v1/cookbook/Recipes", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -312,7 +312,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", request);
+        var response = await HttpClient.PostAsJsonAsync("/v1/cookbook/Recipes", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -334,7 +334,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", request);
+        var response = await HttpClient.PostAsJsonAsync("/v1/cookbook/Recipes", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
@@ -361,7 +361,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PutAsJsonAsync($"/api/cookbook/Recipes/{recipeId}", request);
+        var response = await HttpClient.PutAsJsonAsync($"/v1/cookbook/Recipes/{recipeId}", request);
         var updatedRecipe = await response.Content.ReadFromJsonAsync<RecipeResponse>();
 
         // Assert
@@ -389,7 +389,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PutAsJsonAsync($"/api/cookbook/Recipes/{nonExistentRecipeId}", request);
+        var response = await HttpClient.PutAsJsonAsync($"/v1/cookbook/Recipes/{nonExistentRecipeId}", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -411,7 +411,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PutAsJsonAsync($"/api/cookbook/Recipes/{recipeId}", request);
+        var response = await HttpClient.PutAsJsonAsync($"/v1/cookbook/Recipes/{recipeId}", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -434,7 +434,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         };
 
         // Act
-        var response = await HttpClient.PutAsJsonAsync($"/api/cookbook/Recipes/{recipeId}", request);
+        var response = await HttpClient.PutAsJsonAsync($"/v1/cookbook/Recipes/{recipeId}", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -460,17 +460,17 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
             Categories = [_createRecipeCategoryRequest],
             Steps = [_createStepRequest]
         };
-        var createResponse = await HttpClient.PostAsJsonAsync("/api/cookbook/Recipes", createRequest);
+        var createResponse = await HttpClient.PostAsJsonAsync("/v1/cookbook/Recipes", createRequest);
         var createdRecipe = await createResponse.Content.ReadFromJsonAsync<RecipeResponse>();
 
         // Act
-        var deleteResponse = await HttpClient.DeleteAsync($"/api/cookbook/Recipes/{createdRecipe!.RecipeId}");
+        var deleteResponse = await HttpClient.DeleteAsync($"/v1/cookbook/Recipes/{createdRecipe!.RecipeId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
 
         // Verify recipe is deleted
-        var getResponse = await HttpClient.GetAsync($"/api/cookbook/Recipes/{createdRecipe.RecipeId}");
+        var getResponse = await HttpClient.GetAsync($"/v1/cookbook/Recipes/{createdRecipe.RecipeId}");
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
@@ -482,7 +482,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int nonExistentRecipeId = 9999;
 
         // Act
-        var response = await HttpClient.DeleteAsync($"/api/cookbook/Recipes/{nonExistentRecipeId}");
+        var response = await HttpClient.DeleteAsync($"/v1/cookbook/Recipes/{nonExistentRecipeId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -496,7 +496,7 @@ public class RecipesControllerTests(APiWebApplicationFactory webApi) : Integrati
         const int recipeId = 1;
 
         // Act
-        var response = await HttpClient.DeleteAsync($"/api/cookbook/Recipes/{recipeId}");
+        var response = await HttpClient.DeleteAsync($"/v1/cookbook/Recipes/{recipeId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

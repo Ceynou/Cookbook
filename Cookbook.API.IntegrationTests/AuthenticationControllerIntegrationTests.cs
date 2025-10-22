@@ -21,7 +21,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signup", signUpRequest);
+        var response = await PostAsync("/v1/authentication/signup", signUpRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -44,7 +44,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signup", signUpRequest);
+        var response = await PostAsync("/v1/authentication/signup", signUpRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
@@ -62,7 +62,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signup", signUpRequest);
+        var response = await PostAsync("/v1/authentication/signup", signUpRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
@@ -80,7 +80,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signup", signUpRequest);
+        var response = await PostAsync("/v1/authentication/signup", signUpRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -97,7 +97,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signin", signInRequest);
+        var response = await PostAsync("/v1/authentication/signin", signInRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -119,7 +119,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signin", signInRequest);
+        var response = await PostAsync("/v1/authentication/signin", signInRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -136,7 +136,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signin", signInRequest);
+        var response = await PostAsync("/v1/authentication/signin", signInRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -153,7 +153,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act
-        var response = await PostAsync("/api/Authentication/signin", signInRequest);
+        var response = await PostAsync("/v1/authentication/signin", signInRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -178,7 +178,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         };
 
         // Act - Sign up
-        var signUpResponse = await PostAsync("/api/Authentication/signup", signUpRequest);
+        var signUpResponse = await PostAsync("/v1/authentication/signup", signUpRequest);
         Assert.Equal(HttpStatusCode.OK, signUpResponse.StatusCode);
 
         // Act - Sign in with the same credentials
@@ -187,7 +187,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
             Username = signUpRequest.Username,
             Password = signUpRequest.Password
         };
-        var signInResponse = await PostAsync("/api/Authentication/signin", signInRequest);
+        var signInResponse = await PostAsync("/v1/authentication/signin", signInRequest);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, signInResponse.StatusCode);

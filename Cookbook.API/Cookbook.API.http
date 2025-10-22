@@ -1,5 +1,5 @@
 ###
-POST {{Cookbook}}/api/Authentication/signup
+POST {{Cookbook}}/v1/authentication/signup
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 ###
 
-POST {{Cookbook}}/api/Authentication/signin
+POST {{Cookbook}}/v1/authentication/signin
 Content-Type: application/json
 
 {
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 ###
 
-POST {{Cookbook}}/api/Authentication/signin
+POST {{Cookbook}}/v1/authentication/signin
 Content-Type: application/json
 
 {
@@ -54,7 +54,7 @@ Content-Type: application/json
 
 ###
 
-POST {{Cookbook}}/api/cookbook/Recipes/
+POST {{Cookbook}}/v1/cookbook/Recipes/
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -85,7 +85,7 @@ Authorization: Bearer {{auth_token}}
 }
 
 ###
-PUT {{Cookbook}}/api/cookbook/Recipes/12
+PUT {{Cookbook}}/v1/cookbook/Recipes/12
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -125,7 +125,7 @@ Authorization: Bearer {{auth_token}}
 }
 
 ###
-POST {{Cookbook}}/api/cookbook/Categories/
+POST {{Cookbook}}/v1/cookbook/Categories/
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -134,6 +134,6 @@ Authorization: Bearer {{auth_token}}
 }
 
 ###
-GET {{Cookbook}}/api/cookbook/Recipes/13/full
+GET {{Cookbook}}/v1/cookbook/Recipes/13/full
 Authorization: Bearer {{auth_token}}
 Accept: application/json

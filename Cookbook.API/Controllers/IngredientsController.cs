@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cookbook.API.Controllers;
 
 [Authorize(Roles = "admin,user")]
-[Route("api/cookbook/[controller]")]
+[Route("v1/cookbook/[controller]")]
 [ApiController]
 public class IngredientsController(ICookbookService cookbookService) : ControllerBase
 {
