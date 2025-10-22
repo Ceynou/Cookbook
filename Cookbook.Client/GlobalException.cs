@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Forms;
-using Cookbook.SharedData;
+﻿using Cookbook.SharedData;
 
 namespace Cookbook.Client;
 

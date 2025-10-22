@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Cookbook.Client;
 
@@ -86,7 +82,8 @@ public class RestClient
 
     #region POST
 
-    public async Task<T?> PostAsync<T, TC>(string endpoint, TC content, Dictionary<string, string>? customHeaders = null)
+    public async Task<T?> PostAsync<T, TC>(string endpoint, TC content,
+        Dictionary<string, string>? customHeaders = null)
     {
         var response = await SendAsync(HttpMethod.Post, endpoint, JsonContent.Create(content), customHeaders);
 

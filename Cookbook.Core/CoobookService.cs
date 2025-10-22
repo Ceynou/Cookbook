@@ -25,7 +25,7 @@ public class CookbookService(
             .AsSplitQuery()
             .AsNoTracking()
             .ToListAsync();
-        
+
         return recipes.Count == 0 ? throw new ResourceNotFoundException(recipes.GetType()) : recipes;
     }
 

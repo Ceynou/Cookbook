@@ -1,5 +1,4 @@
 using Cookbook.Core;
-using Xunit;
 
 namespace Cookbook.API.UnitTests;
 

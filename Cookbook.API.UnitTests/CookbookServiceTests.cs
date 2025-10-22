@@ -6,7 +6,6 @@ using Cookbook.SharedData.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Xunit;
 
 namespace Cookbook.API.UnitTests;
 

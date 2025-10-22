@@ -7,7 +7,6 @@ using Cookbook.SharedData.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
 
 namespace Cookbook.API.UnitTests;
 
