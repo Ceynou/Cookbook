@@ -50,30 +50,12 @@
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\dotnet\sdk\10.0.100-rc.2.25502.107\MSBuild.dll</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/DotNetCliExePath/@EntryValue">C:\Program Files\dotnet\dotnet.exe</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">1179648</s:Int64>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4b99b53b_002D60ea_002D4a3a_002D996a_002D40c25b41f8a1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AccessServiceUnitTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADA8A26B-2B1D-4939-AADF-08ABD4488161::net10.0::Cookbook.API.Tests.AccessServiceUnitTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2fd4df28_002Dfc79_002D493e_002Db404_002D9e55154ca1ad/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Cookbook.API.UnitTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\ceyhane.yilmaz\source\repos\Cookbook\Cookbook.API.UnitTests" Presentation="&amp;lt;Cookbook.API.UnitTests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6eeee265_002Dccab_002D4ac5_002Da7bd_002D3a4629cb1f5d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SignUpAsync_ThenSignInAsync_WorksCorrectly" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::A0CD981C-0882-4AA8-B01B-6D9C66264860::net10.0::Cookbook.API.IntegrationTests.AccessServiceIntegrationTests.SignUpAsync_ThenSignInAsync_WorksCorrectly&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-    &lt;ProjectFile&gt;A0CD981C-0882-4AA8-B01B-6D9C66264860/f:RecipesControllerTests.cs&lt;/ProjectFile&gt;&#xD;
-  &lt;/Or&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=73605d21_002D5fdc_002D4441_002Db677_002D6fb4636644cd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AccessServiceUnitTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADA8A26B-2B1D-4939-AADF-08ABD4488161::net10.0::Cookbook.API.UnitTests.PasswordHasherTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADA8A26B-2B1D-4939-AADF-08ABD4488161::net10.0::Cookbook.API.UnitTests.AccessServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADA8A26B-2B1D-4939-AADF-08ABD4488161::net10.0::Cookbook.API.UnitTests.CookbookServiceTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADA8A26B-2B1D-4939-AADF-08ABD4488161::net10.0::Cookbook.API.UnitTests.AuthenticationControllerTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::A0CD981C-0882-4AA8-B01B-6D9C66264860::net10.0::Cookbook.API.IntegrationTests.AccessServiceIntegrationTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::A0CD981C-0882-4AA8-B01B-6D9C66264860::net10.0::Cookbook.API.IntegrationTests.AuthenticationControllerIntegrationTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::A0CD981C-0882-4AA8-B01B-6D9C66264860::net10.0::Cookbook.API.IntegrationTests.RecipesControllerTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	
+	
+	
 	
 	
 	</wpf:ResourceDictionary>
