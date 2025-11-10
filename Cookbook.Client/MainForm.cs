@@ -342,40 +342,45 @@ public partial class MainForm : Window
 
 		private async void bindingSourceRecipes_CurrentChanged(object sender, EventArgs e)
 		{
-				if (tabControl.SelectedTab != tabPageAssociationManager
-						&& tabControl.SelectedTab != tabPageRecipes)
-						return;
 
 				try
 				{
-						Cursor = Cursors.WaitCursor;
-
-
 						if (bindingSourceRecipes.Current is not RecipeResponse currentRecipe) return;
-						var categories = await _rest.GetAsync<IEnumerable<CategoryResponse>>(
-								$"{ClientSettings.Default.UrlGetCategoriesByRecipeId}/{currentRecipe.RecipeId}");
-						if (categories == null) return;
-
-						_categoriesInRecipe.Clear();
-						foreach (var category in categories)
-								_categoriesInRecipe.Add(category);
-
-						_categoriesNotInRecipe.Clear();
-						foreach (var category in _categories.Where(category => _categoriesInRecipe.All(a => a.CategoryId != category.CategoryId)))
+						Cursor = Cursors.WaitCursor;
+						if (tabControl.SelectedTab == tabPageAssociationManager)
 						{
-								_categoriesNotInRecipe.Add(category);
+
+
+
+								var categories = await _rest.GetAsync<IEnumerable<CategoryResponse>>(
+										$"{ClientSettings.Default.UrlGetCategoriesByRecipeId}/{currentRecipe.RecipeId}");
+								if (categories == null) return;
+
+								_categoriesInRecipe.Clear();
+								foreach (var category in categories)
+										_categoriesInRecipe.Add(category);
+
+								_categoriesNotInRecipe.Clear();
+								foreach (var category in _categories.Where(category => _categoriesInRecipe.All(a => a.CategoryId != category.CategoryId)))
+								{
+										_categoriesNotInRecipe.Add(category);
+								}
+
 						}
-
-						var recipeIngredients = await _rest.GetAsync<IEnumerable<RecipeIngredientResponse>>(
-								$"{ClientSettings.Default.UrlGetIngredientsByRecipeId}/{currentRecipe.RecipeId}");
-
-						_ingredientsInRecipe.Clear();
-						if (recipeIngredients is null) return;
-						foreach (var ingredient in recipeIngredients)
+						else if (tabControl.SelectedTab == tabPageRecipes)
 						{
-								_ingredientsInRecipe.Add(ingredient);
-						}
 
+								var recipeIngredients = await _rest.GetAsync<IEnumerable<RecipeIngredientResponse>>(
+										$"{ClientSettings.Default.UrlGetIngredientsByRecipeId}/{currentRecipe.RecipeId}");
+
+								_ingredientsInRecipe.Clear();
+								if (recipeIngredients is null) return;
+								foreach (var ingredient in recipeIngredients)
+								{
+										_ingredientsInRecipe.Add(ingredient);
+								}
+
+						}
 
 				}
 				finally
