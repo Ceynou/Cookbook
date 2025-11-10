@@ -114,19 +114,50 @@ public interface ICookbookService
     /// <returns>A Task representing the asynchronous operation.</returns>
     Task DeleteCategoryAsync(short id);
 
-    #endregion
+		/// <summary>
+		///     Fetches all the <see cref="Category" /> related to a <see cref="Recipe" /> by its primary key.
+		/// </summary>
+		/// <param name="recipeId">the primary key.</param>
+		/// <remarks>
+		///     <para>GlobalExceptionMiddleware handles the exception and returns a NotFoundResult response with error details.</para>
+		/// </remarks>
+		/// <exception cref="ResourceNotFoundException">thrown if the database context returns a null.</exception>
+		/// <returns>One <see cref="Category" />.</returns>
+		Task<IEnumerable<RecipeCategory>> GetCategoryByRecipeIdAsync(int recipeId);
 
-    #region CRUD for ingredients
+		/// <summary>
+		///     Adds a <see cref="Category" />/<see cref="Recipe"/> relationship into the database.
+		/// </summary>
+		/// <param name="categoryId">the category id that composes the composite key.</param>
+		/// <param name="recipeId">the recipe id that composes the key.</param>
+		/// <returns>The <see cref="Category" /> from the database.</returns>
+		Task AddCategoryByRecipeIdAsync(short categoryId, int recipeId);
 
-    /// <summary>
-    ///     Fetches all the <see cref="Ingredient" /> entities from the database.
-    /// </summary>
-    /// <remarks>
-    ///     <para>GlobalExceptionMiddleware handles the exception and returns a NotFoundResult response with error details.</para>
-    /// </remarks>
-    /// <exception cref="ResourceNotFoundException">thrown if the database context returns an empty collection.</exception>
-    /// <returns>A collection of <see cref="Ingredient" />.</returns>
-    Task<IEnumerable<Ingredient>> GetAllIngredientsAsync();
+		/// <summary>
+		///     Deletes a <see cref="Recipe" />/<see cref="Category" /> relationship from the database.
+		/// </summary>
+		/// <param name="categoryId">the category id that composes the composite key.</param>
+		/// <param name="recipeId">the recipe id that composes the key.</param>
+		/// <remarks>
+		///     <para>GlobalExceptionMiddleware handles the exception and returns a NotFoundResult response with error details.</para>
+		/// </remarks>
+		/// <exception cref="ResourceNotFoundException">thrown if the database context returns false.</exception>
+		/// <returns>A Task representing the asynchronous operation.</returns>
+		Task RemoveCategoryByRecipeIdAsync(short categoryId, int recipeId);
+
+		#endregion
+
+		#region CRUD for ingredients
+
+		/// <summary>
+		///     Fetches all the <see cref="Ingredient" /> entities from the database.
+		/// </summary>
+		/// <remarks>
+		///     <para>GlobalExceptionMiddleware handles the exception and returns a NotFoundResult response with error details.</para>
+		/// </remarks>
+		/// <exception cref="ResourceNotFoundException">thrown if the database context returns an empty collection.</exception>
+		/// <returns>A collection of <see cref="Ingredient" />.</returns>
+		Task<IEnumerable<Ingredient>> GetAllIngredientsAsync();
 
     /// <summary>
     ///     Fetches one <see cref="Ingredient" /> by its primary key.
@@ -169,5 +200,17 @@ public interface ICookbookService
     /// <returns>A Task representing the asynchronous operation.</returns>
     Task DeleteIngredientAsync(short id);
 
-    #endregion
+		/// <summary>
+		///     Fetches all the <see cref="Ingredient" /> related to a <see cref="Recipe" /> by its primary key.
+		/// </summary>
+		/// <param name="recipeId">the primary key.</param>
+		/// <remarks>
+		///     <para>GlobalExceptionMiddleware handles the exception and returns a NotFoundResult response with error details.</para>
+		/// </remarks>
+		/// <exception cref="ResourceNotFoundException">thrown if the database context returns a null.</exception>
+		/// <returns>One <see cref="Ingredient" />.</returns>
+		Task<IEnumerable<RecipeIngredient>> GetIngredientByRecipeIdAsync(int recipeId);
+
+		#endregion
+
 }

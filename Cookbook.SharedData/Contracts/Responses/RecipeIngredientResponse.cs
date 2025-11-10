@@ -3,6 +3,7 @@
 public record RecipeIngredientResponse
 {
     public required short IngredientId { get; init; }
+		public required string Name { get; init; }
     public required decimal Quantity { get; init; }
     public string? Unit { get; init; }
 }

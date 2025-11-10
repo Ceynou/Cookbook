@@ -115,7 +115,7 @@ namespace Cookbook.Infrastructure.Migrations
                     b.ToTable("recipes", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipesCategory", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipeCategory", b =>
                 {
                     b.Property<int>("RecipeId")
                         .HasColumnType("integer")
@@ -133,7 +133,7 @@ namespace Cookbook.Infrastructure.Migrations
                     b.ToTable("recipes_categories", (string)null);
                 });
 
-            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipesIngredient", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipeIngredient", b =>
                 {
                     b.Property<int>("RecipeId")
                         .HasColumnType("integer")
@@ -279,7 +279,7 @@ namespace Cookbook.Infrastructure.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipesCategory", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipeCategory", b =>
                 {
                     b.HasOne("Cookbook.SharedData.Entities.Category", "Category")
                         .WithMany("RecipesCategories")
@@ -300,7 +300,7 @@ namespace Cookbook.Infrastructure.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipesIngredient", b =>
+            modelBuilder.Entity("Cookbook.SharedData.Entities.RecipeIngredient", b =>
                 {
                     b.HasOne("Cookbook.SharedData.Entities.Ingredient", "Ingredient")
                         .WithMany("RecipesIngredients")

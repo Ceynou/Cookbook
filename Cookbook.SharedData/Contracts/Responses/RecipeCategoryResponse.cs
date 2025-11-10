@@ -3,4 +3,5 @@
 public record RecipeCategoryResponse
 {
     public required short CategoryId { get; init; }
+		public required string Name { get; init; }
 }

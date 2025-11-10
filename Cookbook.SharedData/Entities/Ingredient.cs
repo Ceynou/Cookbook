@@ -6,5 +6,5 @@ public sealed class Ingredient
 
     public string Name { get; init; } = null!;
 
-    public ICollection<RecipesIngredient> RecipesIngredients { get; init; } = new List<RecipesIngredient>();
+    public ICollection<RecipeIngredient> RecipesIngredients { get; init; } = new List<RecipeIngredient>();
 }

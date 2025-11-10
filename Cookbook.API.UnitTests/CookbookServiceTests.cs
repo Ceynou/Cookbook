@@ -1,4 +1,4 @@
-using System.Security.Claims;
+		using System.Security.Claims;
 using Cookbook.Core;
 using Cookbook.Infrastructure;
 using Cookbook.SharedData.Entities;
@@ -533,14 +533,14 @@ public class CookbookServiceTests : IDisposable
             Instruction = "Boil water",
             Duration = TimeSpan.FromMinutes(10)
         };
-        var recipeIngredient = new RecipesIngredient
+        var recipeIngredient = new RecipeIngredient
         {
             RecipeId = recipe.RecipeId,
             IngredientId = ingredient.IngredientId,
             Quantity = 2,
             Unit = "pieces"
         };
-        var recipeCategory = new RecipesCategory
+        var recipeCategory = new RecipeCategory
         {
             RecipeId = recipe.RecipeId,
             CategoryId = category.CategoryId

@@ -47,7 +47,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         var response = await PostAsync("/v1/authentication/signup", signUpRequest);
 
         // Assert
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class AuthenticationControllerIntegrationTests(APiWebApplicationFactory w
         var response = await PostAsync("/v1/authentication/signup", signUpRequest);
 
         // Assert
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     [Fact]

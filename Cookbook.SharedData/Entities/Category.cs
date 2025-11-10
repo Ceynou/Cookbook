@@ -6,5 +6,5 @@ public sealed class Category
 
     public string Name { get; init; } = null!;
 
-    public ICollection<RecipesCategory> RecipesCategories { get; init; } = new List<RecipesCategory>();
+    public ICollection<RecipeCategory> RecipesCategories { get; init; } = new List<RecipeCategory>();
 }

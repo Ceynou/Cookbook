@@ -1,6 +1,6 @@
 ﻿namespace Cookbook.SharedData.Entities;
 
-public sealed class RecipesIngredient
+public sealed class RecipeIngredient
 {
     public int RecipeId { get; init; }
 

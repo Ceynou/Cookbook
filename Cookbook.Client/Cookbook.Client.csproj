@@ -9,11 +9,32 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AntdUI" Version="2.1.12"/>
+        <PackageReference Include="AntdUI" Version="2.1.12" />
+        <PackageReference Include="Syncfusion.Core.WinForms" Version="31.2.3" />
+        <PackageReference Include="Syncfusion.Licensing" Version="31.2.3" />
+        <PackageReference Include="Syncfusion.SfDataGrid.WinForms" Version="31.2.3" />
+        <PackageReference Include="Syncfusion.SfInput.WinForms" Version="31.2.3" />
+        <PackageReference Include="Syncfusion.SfListView.WinForms" Version="31.2.3" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Cookbook.SharedData\Cookbook.SharedData.csproj"/>
+        <ProjectReference Include="..\Cookbook.SharedData\Cookbook.SharedData.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Properties\ClientSettings.Designer.cs">
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ClientSettings.settings</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Properties\ClientSettings.settings">
+        <Generator>SettingsSingleFileGenerator</Generator>
+        <LastGenOutput>ClientSettings.Designer.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
 </Project>

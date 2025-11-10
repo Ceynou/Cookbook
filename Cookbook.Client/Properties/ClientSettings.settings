@@ -1,0 +1,48 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Cookbook.Client.Properties" GeneratedClassName="ClientSettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ApiUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:5213/</Value>
+    </Setting>
+    <Setting Name="Username" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="UrlGetRecipes" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/recipes</Value>
+    </Setting>
+    <Setting Name="UrlGetCategories" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories</Value>
+    </Setting>
+    <Setting Name="UrlGetCategoriesByRecipeId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories/recipe</Value>
+    </Setting>
+    <Setting Name="UrlPostCategory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories</Value>
+    </Setting>
+    <Setting Name="UrlPostCategoryByRecipeId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories/recipe</Value>
+    </Setting>
+    <Setting Name="UrlPutCategory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories</Value>
+    </Setting>
+    <Setting Name="UrlDeleteCategory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories</Value>
+    </Setting>
+    <Setting Name="UrlRemoveCategoryByRecipeId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories/recipe</Value>
+    </Setting>
+    <Setting Name="UrlSignIn" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/authentication/signin</Value>
+    </Setting>
+    <Setting Name="UrlGetIngredientsByRecipeId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/ingredients/recipe</Value>
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="UrlAddCategoryByRecipeId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">v1/cookbook/categories/recipe</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

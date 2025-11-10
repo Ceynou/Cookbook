@@ -1,184 +1,267 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Cookbook.Infrastructure;
 using Cookbook.SharedData.Entities;
 using Cookbook.SharedData.Exceptions;
-using Microsoft.AspNetCore.Http;
+using Cookbook.SharedData.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cookbook.Core;
 
 public class CookbookService(
-    IHttpContextAccessor httpContextAccessor,
-    CookbookContext context) : ICookbookService
+		IHttpContextAccessor httpContextAccessor,
+		CookbookContext context) : ICookbookService
 {
-    #region CRUD for Recipes
+		#region CRUD for Recipes
 
-    public async Task<IEnumerable<Recipe>> GetAllRecipesAsync()
-    {
-        var recipes = await context.Recipes
-            .Include(r => r.Creator)
-            .Include(r => r.Steps)
-            .Include(r => r.RecipesIngredients)
-            .Include(r => r.RecipesCategories)
-            .Include(r => r.Reviews)
-            .ThenInclude(rw => rw.Reviewer)
-            .AsSplitQuery()
-            .AsNoTracking()
-            .ToListAsync();
+		public async Task<IEnumerable<Recipe>> GetAllRecipesAsync()
+		{
+				var recipes = await context.Recipes
+						.Include(r => r.Creator)
+						.Include(r => r.Steps)
+						.Include(r => r.RecipesIngredients)
+						.Include(r => r.RecipesCategories)
+						.Include(r => r.Reviews)
+						.ThenInclude(rw => rw.Reviewer)
+						.AsSplitQuery()
+						.AsNoTracking()
+						.ToListAsync();
 
-        return recipes.Count == 0 ? throw new ResourceNotFoundException(recipes.GetType()) : recipes;
-    }
+				return recipes.Count == 0 ? throw new ResourceNotFoundException(recipes.GetType()) : recipes;
+		}
 
-    public async Task<Recipe> GetRecipeByAsync(int id)
-    {
-        var recipe = await context.Recipes
-            .Where(r => r.RecipeId == id)
-            .Include(r => r.Creator)
-            .Include(r => r.Steps)
-            .Include(r => r.RecipesIngredients)
-            .ThenInclude(ri => ri.Ingredient)
-            .Include(r => r.RecipesCategories)
-            .ThenInclude(r => r.Category)
-            .Include(r => r.Reviews)
-            .ThenInclude(rw => rw.Reviewer)
-            .AsSplitQuery()
-            .SingleOrDefaultAsync();
+		public async Task<Recipe> GetRecipeByAsync(int id)
+		{
+				var recipe = await context.Recipes
+						.Where(r => r.RecipeId == id)
+						.Include(r => r.Creator)
+						.Include(r => r.Steps)
+						.Include(r => r.RecipesIngredients)
+						.ThenInclude(ri => ri.Ingredient)
+						.Include(r => r.RecipesCategories)
+						.ThenInclude(r => r.Category)
+						.Include(r => r.Reviews)
+						.ThenInclude(rw => rw.Reviewer)
+						.AsSplitQuery()
+						.SingleOrDefaultAsync();
 
-        return recipe ?? throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), id);
-    }
+				return recipe ?? throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), id);
+		}
 
-    public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
-    {
-        var user = httpContextAccessor.HttpContext?.User;
-        var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
+		{
+				var user = httpContextAccessor.HttpContext?.User;
+				var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (int.TryParse(userIdClaim, out var creatorId))
-            recipe.CreatorId = creatorId;
+				if (int.TryParse(userIdClaim, out var creatorId))
+						recipe.CreatorId = creatorId;
 
-        context.Recipes.Add(recipe);
-        await context.SaveChangesAsync();
-        return recipe;
-    }
+				context.Recipes.Add(recipe);
+				await context.SaveChangesAsync();
+				return recipe;
+		}
 
-    public async Task<Recipe> ModifyRecipeAsync(int id, Recipe recipe)
-    {
-        var existingRecipe = await GetRecipeByAsync(id);
+		public async Task<Recipe> ModifyRecipeAsync(int id, Recipe recipe)
+		{
+				var existingRecipe = await GetRecipeByAsync(id);
 
-        recipe.RecipeId = id;
+				recipe.RecipeId = id;
 
-        context.RecipesIngredients.RemoveRange(existingRecipe.RecipesIngredients);
-        context.RecipesCategories.RemoveRange(existingRecipe.RecipesCategories);
-        context.Steps.RemoveRange(existingRecipe.Steps);
+				context.RecipesIngredients.RemoveRange(existingRecipe.RecipesIngredients);
+				context.RecipesCategories.RemoveRange(existingRecipe.RecipesCategories);
+				context.Steps.RemoveRange(existingRecipe.Steps);
 
-        context.Entry(existingRecipe).CurrentValues.SetValues(recipe);
+				context.Entry(existingRecipe).CurrentValues.SetValues(recipe);
 
-        existingRecipe.RecipesIngredients = recipe.RecipesIngredients;
-        existingRecipe.RecipesCategories = recipe.RecipesCategories;
-        existingRecipe.Steps = recipe.Steps;
+				existingRecipe.RecipesIngredients = recipe.RecipesIngredients;
+				existingRecipe.RecipesCategories = recipe.RecipesCategories;
+				existingRecipe.Steps = recipe.Steps;
 
-        await context.SaveChangesAsync();
+				await context.SaveChangesAsync();
 
-        return recipe;
-    }
+				return recipe;
+		}
 
-    public async Task DeleteRecipeAsync(int id)
-    {
-        var recipe = await context.Recipes.FindAsync(id);
-        if (recipe == null)
-            throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), id);
-        context.Recipes.Remove(recipe);
-        await context.SaveChangesAsync();
-    }
+		public async Task DeleteRecipeAsync(int id)
+		{
+				var recipe = await context.Recipes.FindAsync(id);
+				if (recipe == null)
+						throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), id);
+				context.Recipes.Remove(recipe);
+				await context.SaveChangesAsync();
+		}
 
-    #endregion
+		#endregion
 
-    #region CRUD for Ingredients
+		#region CRUD for Ingredients
 
-    public async Task<IEnumerable<Ingredient>> GetAllIngredientsAsync()
-    {
-        var ingredients = await context.Ingredients.ToListAsync();
-        return ingredients.Count == 0
-            ? throw new ResourceNotFoundException(typeof(IEnumerable<Ingredient>))
-            : ingredients;
-    }
+		public async Task<IEnumerable<Ingredient>> GetAllIngredientsAsync()
+		{
+				var ingredients = await context.Ingredients.ToListAsync();
+				return ingredients.Count == 0
+						? throw new ResourceNotFoundException(typeof(IEnumerable<Ingredient>))
+						: ingredients;
+		}
 
-    public async Task<Ingredient> GetIngredientByAsync(short id)
-    {
-        var ingredient = await context.Ingredients.FindAsync(id);
-        return ingredient ?? throw new ResourceNotFoundException(typeof(Ingredient), nameof(Ingredient), id);
-    }
+		public async Task<Ingredient> GetIngredientByAsync(short id)
+		{
+				var ingredient = await context.Ingredients.FindAsync(id);
+				return ingredient ?? throw new ResourceNotFoundException(typeof(Ingredient), nameof(Ingredient), id);
+		}
 
-    public async Task<Ingredient> CreateIngredientAsync(Ingredient ingredient)
-    {
-        context.Ingredients.Add(ingredient);
-        await context.SaveChangesAsync();
-        return ingredient;
-    }
+		public async Task<Ingredient> CreateIngredientAsync(Ingredient ingredient)
+		{
+				context.Ingredients.Add(ingredient);
+				await context.SaveChangesAsync();
+				return ingredient;
+		}
 
-    public async Task<Ingredient> ModifyIngredientAsync(short id, Ingredient ingredient)
-    {
-        var ingredientExists = await context.Ingredients.AnyAsync(i => i.IngredientId == id);
-        if (!ingredientExists)
-            throw new ResourceNotFoundException(typeof(Ingredient), nameof(Ingredient.IngredientId), id);
+		public async Task<Ingredient> ModifyIngredientAsync(short id, Ingredient ingredient)
+		{
+				var ingredientExists = await context.Ingredients.AnyAsync(i => i.IngredientId == id);
+				if (!ingredientExists)
+						throw new ResourceNotFoundException(typeof(Ingredient), nameof(Ingredient.IngredientId), id);
 
-        ingredient.IngredientId = id;
-        context.Ingredients.Update(ingredient);
-        await context.SaveChangesAsync();
-        return ingredient;
-    }
+				ingredient.IngredientId = id;
+				context.Ingredients.Update(ingredient);
+				await context.SaveChangesAsync();
+				return ingredient;
+		}
 
-    public async Task DeleteIngredientAsync(short id)
-    {
-        var ingredient = await context.Ingredients.FindAsync(id);
-        if (ingredient == null)
-            throw new ResourceNotFoundException(typeof(Ingredient), nameof(Ingredient), id);
-        context.Ingredients.Remove(ingredient);
-        await context.SaveChangesAsync();
-    }
+		public async Task DeleteIngredientAsync(short id)
+		{
+				var ingredient = await context.Ingredients.FindAsync(id);
+				if (ingredient == null)
+						throw new ResourceNotFoundException(typeof(Ingredient), nameof(Ingredient), id);
+				context.Ingredients.Remove(ingredient);
+				await context.SaveChangesAsync();
+		}
 
-    #endregion
+		public async Task<IEnumerable<RecipeIngredient>> GetIngredientByRecipeIdAsync(int recipeId)
+		{
+				var recipe = await context.Recipes
+						.Where(r => r.RecipeId == recipeId)
+						.Include(r => r.RecipesIngredients)
+						.ThenInclude(rc => rc.Ingredient)
+						.FirstOrDefaultAsync();
+				if (recipe is null)
+						throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), recipeId);
+				var recipeIngredients = recipe.RecipesIngredients;
 
-    #region CRUD for Categories
+				return recipeIngredients.Count == 0 ? throw new ResourceNotFoundException(recipeIngredients.GetType()) : recipeIngredients;
+		}
 
-    public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
-    {
-        var categories = await context.Categories.ToListAsync();
-        return categories.Count == 0 ? throw new ResourceNotFoundException(categories.GetType()) : categories;
-    }
+		#endregion
 
-    public async Task<Category> GetCategoryByAsync(short id)
-    {
-        var category = await context.Categories.FindAsync(id);
-        return category ?? throw new ResourceNotFoundException(typeof(Category), nameof(Category), id);
-    }
+		#region CRUD for Categories
 
-    public async Task<Category> CreateCategoryAsync(Category category)
-    {
-        context.Categories.Add(category);
-        await context.SaveChangesAsync();
-        return category;
-    }
+		public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+		{
+				var categories = await context.Categories.ToListAsync();
+				return categories.Count == 0 ? throw new ResourceNotFoundException(categories.GetType()) : categories;
+		}
 
-    public async Task<Category> ModifyCategoryAsync(short id, Category category)
-    {
-        var categoryExists = await context.Categories.AnyAsync(c => c.CategoryId == id);
-        if (!categoryExists)
-            throw new ResourceNotFoundException(typeof(Category), nameof(Category.CategoryId), id);
+		public async Task<Category> GetCategoryByAsync(short id)
+		{
+				var category = await context.Categories.FindAsync(id);
+				return category ?? throw new ResourceNotFoundException(typeof(Category), nameof(Category), id);
+		}
 
-        category.CategoryId = id;
-        context.Update(category);
-        await context.SaveChangesAsync();
-        return category;
-    }
+		public async Task<Category> CreateCategoryAsync(Category category)
+		{
+				context.Categories.Add(category);
+				await context.SaveChangesAsync();
+				return category;
+		}
 
-    public async Task DeleteCategoryAsync(short id)
-    {
-        var category = await context.Categories.FindAsync(id);
-        if (category == null)
-            throw new ResourceNotFoundException(typeof(Category), nameof(Category), id);
-        context.Categories.Remove(category);
-        await context.SaveChangesAsync();
-    }
+		public async Task<Category> ModifyCategoryAsync(short id, Category category)
+		{
+				var categoryExists = await context.Categories.AnyAsync(c => c.CategoryId == id);
+				if (!categoryExists)
+						throw new ResourceNotFoundException(typeof(Category), nameof(Category.CategoryId), id);
 
-    #endregion
+				category.CategoryId = id;
+				context.Update(category);
+				await context.SaveChangesAsync();
+				return category;
+		}
+
+		public async Task DeleteCategoryAsync(short id)
+		{
+				var category = await context.Categories.FindAsync(id)
+						?? throw new ResourceNotFoundException(typeof(Category), nameof(Category), id);
+
+				if (await context.RecipesCategories.AnyAsync(rc => rc.CategoryId == id))
+						throw new InvalidOperationException("Cannot delete a category when a recipe is associated with it.");
+
+				context.Categories.Remove(category);
+				await context.SaveChangesAsync();
+		}
+
+		public async Task<IEnumerable<RecipeCategory>> GetCategoryByRecipeIdAsync(int recipeId)
+		{
+				var recipe = await context.Recipes
+						.Where(r => r.RecipeId == recipeId)
+						.Include(r => r.RecipesCategories)
+						.ThenInclude(rc => rc.Category)
+						.FirstOrDefaultAsync();
+
+				if (recipe is null)
+						throw new ResourceNotFoundException(typeof(Recipe), nameof(recipe.RecipeId), recipeId);
+				var categories = recipe.RecipesCategories;
+
+				return categories.Count == 0 ? throw new ResourceNotFoundException(categories.GetType()) : categories;
+		}
+
+		public async Task AddCategoryByRecipeIdAsync(short categoryId, int recipeId)
+		{
+				var categoryExists = await context.Categories.AnyAsync(c => c.CategoryId == categoryId);
+				var recipe = await context.Recipes
+						.Where(r => r.RecipeId == recipeId)
+						.Include(r => r.RecipesCategories)
+						.FirstOrDefaultAsync() 
+						?? throw new ResourceNotFoundException(typeof(Recipe), nameof(Recipe), recipeId);
+
+				if (!categoryExists)
+						throw new ResourceNotFoundException(typeof(Category), nameof(Category), categoryId);
+
+
+
+				if (!recipe.RecipesCategories.Any(rc => rc.CategoryId == categoryId))
+				{
+						recipe.RecipesCategories.Add(new RecipeCategory { CategoryId = categoryId, RecipeId = recipeId });
+						await context.SaveChangesAsync();
+				}
+				else
+						throw new DuplicatePropertyException(nameof(RecipeCategory.CategoryId), categoryId.ToString());
+		}
+
+		public async Task RemoveCategoryByRecipeIdAsync(short categoryId, int recipeId)
+		{
+				var categoryExists = await context.Categories.AnyAsync(c => c.CategoryId == categoryId);
+				var recipe = await context.Recipes
+						.Where(r => r.RecipeId == recipeId)
+						.Include(r => r.RecipesCategories)
+						.FirstOrDefaultAsync() 
+						?? throw new ResourceNotFoundException(typeof(Recipe), nameof(Recipe), recipeId);
+
+				if (!categoryExists)
+						throw new ResourceNotFoundException(typeof(Category), nameof(Category), categoryId);
+
+				if (recipe.RecipesCategories.Count > 1)
+				{
+						var recipeCategoryToRemove = recipe.RecipesCategories.FirstOrDefault(rc => rc.CategoryId == categoryId);
+						if (recipeCategoryToRemove is not null)
+						{
+								recipe.RecipesCategories.Remove(recipeCategoryToRemove);
+								await context.SaveChangesAsync();
+						}
+						else
+								throw new ResourceNotFoundException(typeof(RecipeCategory), nameof(RecipeCategory), (recipeId, categoryId));
+				}
+				else
+						throw new InvalidOperationException("A recipe must have at least one category.");
+		}
+
+		#endregion
 }

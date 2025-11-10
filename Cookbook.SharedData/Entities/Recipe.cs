@@ -18,11 +18,11 @@ public sealed class Recipe
 
     public User? Creator { get; init; }
 
-    public ICollection<RecipesIngredient> RecipesIngredients { get; set; } = new List<RecipesIngredient>();
+    public ICollection<RecipeIngredient> RecipesIngredients { get; set; } = new List<RecipeIngredient>();
 
     public ICollection<Review> Reviews { get; init; } = new List<Review>();
 
     public ICollection<Step> Steps { get; set; } = new List<Step>();
 
-    public ICollection<RecipesCategory> RecipesCategories { get; set; } = new List<RecipesCategory>();
+    public ICollection<RecipeCategory> RecipesCategories { get; set; } = new List<RecipeCategory>();
 }

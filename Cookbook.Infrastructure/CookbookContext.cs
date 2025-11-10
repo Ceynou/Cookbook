@@ -192,7 +192,7 @@ public class CookbookContext : DbContext
         }
     ];
 
-    private readonly RecipesCategory[] _newRecipesCategories =
+    private readonly RecipeCategory[] _newRecipesCategories =
     [
         new() { RecipeId = 1, CategoryId = 8 },
         new() { RecipeId = 2, CategoryId = 8 },
@@ -210,7 +210,7 @@ public class CookbookContext : DbContext
         new() { RecipeId = 11, CategoryId = 9 }
     ];
 
-    private readonly RecipesIngredient[] _newRecipesIngredients =
+    private readonly RecipeIngredient[] _newRecipesIngredients =
     [
         new() { RecipeId = 1, IngredientId = 3, Quantity = 1, Unit = "tbs" },
         new() { RecipeId = 1, IngredientId = 5, Quantity = 4, Unit = null },
@@ -761,8 +761,8 @@ public class CookbookContext : DbContext
 
     public virtual DbSet<Recipe> Recipes { get; set; }
 
-    public virtual DbSet<RecipesCategory> RecipesCategories { get; set; }
-    public virtual DbSet<RecipesIngredient> RecipesIngredients { get; set; }
+    public virtual DbSet<RecipeCategory> RecipesCategories { get; set; }
+    public virtual DbSet<RecipeIngredient> RecipesIngredients { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
 
@@ -836,7 +836,7 @@ public class CookbookContext : DbContext
                 .HasConstraintName("recipes_creator_id_fkey");
         });
 
-        modelBuilder.Entity<RecipesCategory>(entity =>
+        modelBuilder.Entity<RecipeCategory>(entity =>
         {
             entity.HasKey(e => new { e.RecipeId, e.CategoryId }).HasName("recipes_categories_pkey");
 
@@ -854,7 +854,7 @@ public class CookbookContext : DbContext
                 .HasConstraintName("recipes_categories_recipe_id_fkey");
         });
 
-        modelBuilder.Entity<RecipesIngredient>(entity =>
+        modelBuilder.Entity<RecipeIngredient>(entity =>
         {
             entity.HasKey(e => new { e.RecipeId, e.IngredientId }).HasName("recipes_ingredients_pkey");
 

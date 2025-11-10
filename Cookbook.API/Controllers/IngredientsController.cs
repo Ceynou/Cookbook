@@ -79,5 +79,16 @@ public class IngredientsController(ICookbookService cookbookService) : Controlle
         await cookbookService.DeleteIngredientAsync((short)id);
 
         return NoContent();
-    }
+		}
+
+		[HttpGet("recipe/{recipeId:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> GetIngredientsByRecipeId(int recipeId)
+		{
+				var recipeIngredients = await cookbookService.GetIngredientByRecipeIdAsync(recipeId);
+				var response = recipeIngredients.Select(rc => rc.ToRecipeIngredientResponse());
+				return Ok(response);
+		}
 }

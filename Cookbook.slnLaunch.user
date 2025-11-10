@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "API+Client",
+    "Projects": [
+      {
+        "Path": "Cookbook.API\\Cookbook.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Cookbook.Client\\Cookbook.Client.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

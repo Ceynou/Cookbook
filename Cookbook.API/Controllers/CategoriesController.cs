@@ -79,5 +79,39 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
         await cookbookService.DeleteCategoryAsync((short)id);
 
         return NoContent();
-    }
+		}
+
+		[HttpGet("recipe/{recipeId:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> GetCategoriesByRecipeId(int recipeId)
+		{
+				var recipeCategories = await cookbookService.GetCategoryByRecipeIdAsync(recipeId);
+				var response = recipeCategories.Select(rc => rc.ToCategoryResponse()).ToList();
+				return Ok(response);
+		}
+
+		[HttpPost("recipe/{categoryId:int}/{recipeId:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> AddCategoryByRecipeId(int categoryId, int recipeId)
+		{
+				await cookbookService.AddCategoryByRecipeIdAsync((short)categoryId, recipeId);
+				return Ok();
+
+		}
+
+		[HttpDelete("recipe/{categoryId:int}/{recipeId:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> RemoveCategoryByRecipeId(int categoryId, int recipeId)
+		{
+				await cookbookService.RemoveCategoryByRecipeIdAsync((short)categoryId, recipeId);
+				return NoContent();
+		}
+
+
 }
