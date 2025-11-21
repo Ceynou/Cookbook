@@ -11,8 +11,8 @@ namespace Cookbook.API.Controllers;
 [ApiController]
 public class RecipesController(ICookbookService cookbookService) : ControllerBase
 {
-    [Authorize]
-    [HttpGet]
+		[Authorize(Roles = "admin,user")]
+		[HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()

@@ -205,7 +205,7 @@ public partial class MainForm : Window
 
 		private async Task RefreshRecipes()
 		{
-				var current = bindingSourceRecipes.Current as Recipe;
+				var current = bindingSourceRecipes.Current as RecipeResponse;
 
 				var res = await _rest.GetAsync<ICollection<RecipeResponse>>(ClientSettings.Default.UrlGetRecipes);
 				if (res == null) return;
@@ -318,7 +318,7 @@ public partial class MainForm : Window
 
 		private async Task RefreshCategories()
 		{
-				var currentCategory = bindingSourceCategories.Current as Category;
+				var currentCategory = bindingSourceCategories.Current as CategoryResponse;
 
 				var res = await _rest.GetAsync<IEnumerable<CategoryResponse>>(ClientSettings.Default.UrlGetCategories);
 				if (res == null) return;

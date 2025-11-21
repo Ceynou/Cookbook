@@ -104,7 +104,7 @@ public class CategoriesController(ICookbookService cookbookService) : Controller
 		}
 
 		[HttpDelete("recipe/{categoryId:int}/{recipeId:int}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> RemoveCategoryByRecipeId(int categoryId, int recipeId)

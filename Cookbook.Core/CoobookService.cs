@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Cookbook.Infrastructure;
 using Cookbook.SharedData.Entities;
 using Cookbook.SharedData.Exceptions;
-using Cookbook.SharedData.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cookbook.Core;
@@ -169,6 +168,9 @@ public class CookbookService(
 
 		public async Task<Category> CreateCategoryAsync(Category category)
 		{
+				var existingCategory = await context.Categories
+						.AnyAsync(c => c.Name.ToLower() == category.Name.ToLower());
+				if (existingCategory) throw new DuplicatePropertyException(nameof(Category.Name), category.Name);
 				context.Categories.Add(category);
 				await context.SaveChangesAsync();
 				return category;

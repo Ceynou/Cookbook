@@ -7,19 +7,19 @@ public static class GlobalException
     public static void HandleThreadException(object sender, ThreadExceptionEventArgs e)
     {
         var ex = e.Exception;
-        MessageBox.Show(GetErrorMessage(ex), "Erreur d'application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(GetErrorMessage(ex), "Application error", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     public static void HandleException(object sender, UnhandledExceptionEventArgs e)
     {
         var ex = e.ExceptionObject as Exception;
-        MessageBox.Show(GetErrorMessage(ex), "Erreur d'application", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(GetErrorMessage(ex), "Application error", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     private static string GetErrorMessage(Exception? ex)
     {
         if (ex is null)
-            return "Une erreur inconnue est survenue dans l'application.";
+            return "Unknown error occured.";
 
         string message;
 
@@ -30,7 +30,7 @@ public static class GlobalException
                 if (restEx.GetRawContent(out ErrorResponse? error))
                     message = $"{restEx.Message}\n\n{error?.Error}\n\n{error?.Details}";
                 else
-                    message = $"{restEx.Message}\n\nContenu brut de la réponse :\n\n{restEx.GetRawContent()}";
+                    message = $"{restEx.Message}\n\nRaw response content :\n\n{restEx.GetRawContent()}";
             }
             else
             {
@@ -39,7 +39,7 @@ public static class GlobalException
         }
         else
         {
-            message = $"Une erreur est survenue dans l'application :\n\n{ex.Message}";
+            message = $"An error occured. :\n\n{ex.Message}";
         }
 
         return message;

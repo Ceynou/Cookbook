@@ -16,6 +16,6 @@ internal static class Program
 
         // Gestion des exceptions non g�r�es (tous threads)
         AppDomain.CurrentDomain.UnhandledException += GlobalException.HandleException;
-        Application.Run(new MainForm());
+				Application.Run(new MainForm());
     }
 }
